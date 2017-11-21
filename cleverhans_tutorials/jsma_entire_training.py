@@ -148,6 +148,7 @@ def mnist_tutorial_jsma(train_start=0, train_end=2, test_start=0,
             print('Adversarial accuracy: %0.4f' % accuracy)
         # report.adv_train_adv_eval = accuracy
 
+    print("About to train the model")
     model_train(sess, x, y, preds, X_train, Y_train,
                 predictions_adv=preds_adv_set, evaluate=evaluate_2,
                 args=train_params, rng=rng)
