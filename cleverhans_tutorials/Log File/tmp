@@ -1,0 +1,91 @@
+[DEBUG 2017-11-18 20:16:54,757 cleverhans] Starting JSMA attack up to 39.0 iterations
+[DEBUG 2017-11-18 20:16:55,204 cleverhans] Iteration 8 of 39
+[DEBUG 2017-11-18 20:16:55,578 cleverhans] Iteration 16 of 39
+[INFO 2017-11-18 20:16:55,717 cleverhans] Attack succeeded using 20 iterations
+[DEBUG 2017-11-18 20:16:55,722 cleverhans] Starting JSMA attack up to 39.0 iterations
+[DEBUG 2017-11-18 20:16:56,105 cleverhans] Iteration 8 of 39
+[DEBUG 2017-11-18 20:16:56,468 cleverhans] Iteration 16 of 39
+[DEBUG 2017-11-18 20:16:56,900 cleverhans] Iteration 24 of 39
+[DEBUG 2017-11-18 20:16:57,377 cleverhans] Iteration 32 of 39
+[INFO 2017-11-18 20:16:57,579 cleverhans] Attack succeeded using 37 iterations
+[DEBUG 2017-11-18 20:16:57,583 cleverhans] Starting JSMA attack up to 39.0 iterations
+[DEBUG 2017-11-18 20:16:58,016 cleverhans] Iteration 8 of 39
+[DEBUG 2017-11-18 20:16:58,354 cleverhans] Iteration 16 of 39
+[DEBUG 2017-11-18 20:16:58,697 cleverhans] Iteration 24 of 39
+[INFO 2017-11-18 20:16:58,706 cleverhans] Attack succeeded using 25 iterations
+[DEBUG 2017-11-18 20:16:58,710 cleverhans] Starting JSMA attack up to 39.0 iterations
+[INFO 2017-11-18 20:16:58,803 cleverhans] Attack succeeded using 2 iterations
+[DEBUG 2017-11-18 20:16:58,807 cleverhans] Starting JSMA attack up to 39.0 iterations
+[DEBUG 2017-11-18 20:16:59,188 cleverhans] Iteration 8 of 39
+[DEBUG 2017-11-18 20:16:59,536 cleverhans] Iteration 16 of 39
+[INFO 2017-11-18 20:16:59,908 cleverhans] Attack succeeded using 23 iterations
+[DEBUG 2017-11-18 20:16:59,912 cleverhans] Starting JSMA attack up to 39.0 iterations
+[DEBUG 2017-11-18 20:17:00,303 cleverhans] Iteration 8 of 39
+[DEBUG 2017-11-18 20:17:00,678 cleverhans] Iteration 16 of 39
+[INFO 2017-11-18 20:17:00,898 cleverhans] Attack succeeded using 21 iterations
+[DEBUG 2017-11-18 20:17:00,905 cleverhans] Starting JSMA attack up to 39.0 iterations
+[INFO 2017-11-18 20:17:01,191 cleverhans] Attack succeeded using 5 iterations
+[DEBUG 2017-11-18 20:17:01,196 cleverhans] Starting JSMA attack up to 39.0 iterations
+[DEBUG 2017-11-18 20:17:01,587 cleverhans] Iteration 8 of 39
+[INFO 2017-11-18 20:17:01,680 cleverhans] Attack succeeded using 11 iterations
+[DEBUG 2017-11-18 20:17:01,684 cleverhans] Starting JSMA attack up to 39.0 iterations
+[DEBUG 2017-11-18 20:17:02,058 cleverhans] Iteration 8 of 39
+[INFO 2017-11-18 20:17:02,325 cleverhans] Attack succeeded using 15 iterations
+[DEBUG 2017-11-18 20:17:02,330 cleverhans] Starting JSMA attack up to 39.0 iterations
+[DEBUG 2017-11-18 20:17:02,693 cleverhans] Iteration 8 of 39
+[DEBUG 2017-11-18 20:17:03,036 cleverhans] Iteration 16 of 39
+[DEBUG 2017-11-18 20:17:03,377 cleverhans] Iteration 24 of 39
+[INFO 2017-11-18 20:17:03,425 cleverhans] Attack succeeded using 26 iterations
+[DEBUG 2017-11-18 20:17:03,430 cleverhans] Starting JSMA attack up to 39.0 iterations
+[DEBUG 2017-11-18 20:17:03,802 cleverhans] Iteration 8 of 39
+[DEBUG 2017-11-18 20:17:04,137 cleverhans] Iteration 16 of 39
+[INFO 2017-11-18 20:17:04,363 cleverhans] Attack succeeded using 22 iterations
+[DEBUG 2017-11-18 20:17:04,368 cleverhans] Starting JSMA attack up to 39.0 iterations
+[DEBUG 2017-11-18 20:17:04,733 cleverhans] Iteration 8 of 39
+[DEBUG 2017-11-18 20:17:05,092 cleverhans] Iteration 16 of 39
+[INFO 2017-11-18 20:17:05,378 cleverhans] Attack succeeded using 23 iterations
+[DEBUG 2017-11-18 20:17:05,382 cleverhans] Starting JSMA attack up to 39.0 iterations
+[DEBUG 2017-11-18 20:17:05,748 cleverhans] Iteration 8 of 39
+[DEBUG 2017-11-18 20:17:06,093 cleverhans] Iteration 16 of 39
+[INFO 2017-11-18 20:17:06,100 cleverhans] Attack succeeded using 17 iterations
+[DEBUG 2017-11-18 20:17:06,105 cleverhans] Starting JSMA attack up to 39.0 iterations
+[INFO 2017-11-18 20:17:06,323 cleverhans] Attack succeeded using 5 iterations
+[DEBUG 2017-11-18 20:17:06,327 cleverhans] Starting JSMA attack up to 39.0 iterations
+[DEBUG 2017-11-18 20:17:06,694 cleverhans] Iteration 8 of 39
+[DEBUG 2017-11-18 20:17:07,039 cleverhans] Iteration 16 of 39
+[INFO 2017-11-18 20:17:07,255 cleverhans] Attack succeeded using 22 iterations
+[DEBUG 2017-11-18 20:17:07,261 cleverhans] Starting JSMA attack up to 39.0 iterations
+[DEBUG 2017-11-18 20:17:07,642 cleverhans] Iteration 8 of 39
+[INFO 2017-11-18 20:17:07,868 cleverhans] Attack succeeded using 14 iterations
+[DEBUG 2017-11-18 20:17:07,872 cleverhans] Starting JSMA attack up to 39.0 iterations
+[DEBUG 2017-11-18 20:17:08,239 cleverhans] Iteration 8 of 39
+[DEBUG 2017-11-18 20:17:08,580 cleverhans] Iteration 16 of 39
+[DEBUG 2017-11-18 20:17:08,921 cleverhans] Iteration 24 of 39
+[DEBUG 2017-11-18 20:17:09,261 cleverhans] Iteration 32 of 39
+[INFO 2017-11-18 20:17:09,532 cleverhans] Failed to find adversarial example after 39 iterations
+[DEBUG 2017-11-18 20:17:09,536 cleverhans] Starting JSMA attack up to 39.0 iterations
+[DEBUG 2017-11-18 20:17:09,911 cleverhans] Iteration 8 of 39
+[DEBUG 2017-11-18 20:17:10,246 cleverhans] Iteration 16 of 39
+[INFO 2017-11-18 20:17:10,485 cleverhans] Attack succeeded using 22 iterations
+[DEBUG 2017-11-18 20:17:10,489 cleverhans] Starting JSMA attack up to 39.0 iterations
+[DEBUG 2017-11-18 20:17:10,868 cleverhans] Iteration 8 of 39
+[DEBUG 2017-11-18 20:17:11,200 cleverhans] Iteration 16 of 39
+[INFO 2017-11-18 20:17:11,250 cleverhans] Attack succeeded using 18 iterations
+[DEBUG 2017-11-18 20:17:11,254 cleverhans] Starting JSMA attack up to 39.0 iterations
+[DEBUG 2017-11-18 20:17:11,631 cleverhans] Iteration 8 of 39
+[INFO 2017-11-18 20:17:11,679 cleverhans] Attack succeeded using 10 iterations
+
+Modified:
+
+11.6 + 60 - 54.6 ==> 18
+60 - 43.5 + 5.2 ==> 22
+29.1 - 8 ==> 21
+-14.4 + 33.5 ==> 19.5
+
+
+Original:
+-37.5 + 56 == > 18.5
+06.3 + 19 == > 25
+
+33.3 - 15.1 => 18
+18.8 - 03 ==> 15
