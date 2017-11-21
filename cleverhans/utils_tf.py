@@ -127,6 +127,7 @@ def model_train(sess, x, y, predictions, X_train, Y_train, save=False,
         # over all pred_adv
         loss /= count
 
+    print("finished the loss function definition")
     train_step = tf.train.AdamOptimizer(learning_rate=args.learning_rate)
     train_step = train_step.minimize(loss)
 
@@ -162,6 +163,7 @@ def model_train(sess, x, y, predictions, X_train, Y_train, save=False,
                              y: Y_train[index_shuf[start:end]]}
                 if feed is not None:
                     feed_dict.update(feed)
+                print("performing train_step running feed")
                 train_step.run(feed_dict=feed_dict)
             assert end >= len(X_train)  # Check that all examples were used
             cur = time.time()
