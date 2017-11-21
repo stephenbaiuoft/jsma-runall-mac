@@ -110,7 +110,9 @@ def mnist_tutorial_jsma(train_start=0, train_end=100, test_start=0,
                    'y_target': None}
 
     # randomly select for testing
-    preds_adv_random = jsma.generate(x, **jsma_params)
+    adv_random = jsma.generate(x, **jsma_params)
+    preds_adv_random = model.get_probs(adv_random)
+
     # ==> generate 10 targeted classes for every train data regardless
     # This call runs the Jacobian-based saliency map approach
     # Loop over the samples we want to perturb into adversarial examples
@@ -155,6 +157,8 @@ def mnist_tutorial_jsma(train_start=0, train_end=100, test_start=0,
 
     X_train_data = np.concatenate(X_train_adv_set, axis=0)
     Y_train_data = np.stack(Y_train_adv_set, axis=0)
+    print("X_train_data shape is: ", X_train_data.shape)
+    print("Y_train_data shape is: ", Y_train_data.shape)
 
 
     def evaluate_2():
