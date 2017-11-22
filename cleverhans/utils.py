@@ -8,6 +8,7 @@ from collections import OrderedDict
 from six.moves import xrange
 import warnings
 import logging
+import os
 
 known_number_types = (int, float, np.float16, np.float32, np.float64,
                       np.int8, np.int16, np.int32, np.int32, np.int64,
@@ -355,12 +356,18 @@ def create_logger(name):
     formatter.
     """
     base = logging.getLogger("cleverhans")
+    cwd = os.getcwd()
+    hdlr = logging.FileHandler(cwd + '/logs/cleverhans_app.log')
+
     if len(base.handlers) == 0:
         ch = logging.StreamHandler()
         formatter = logging.Formatter('[%(levelname)s %(asctime)s %(name)s] ' +
                                       '%(message)s')
         ch.setFormatter(formatter)
+        hdlr.setFormatter(formatter)
         base.addHandler(ch)
+        base.addHandler(hdlr)
+
 
     return base
 

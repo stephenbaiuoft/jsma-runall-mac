@@ -20,8 +20,8 @@ from cleverhans_tutorials.tutorial_models import make_basic_cnn
 FLAGS = flags.FLAGS
 
 
-def mnist_tutorial_jsma(train_start=0, train_end=100, test_start=0,
-                        test_end=10, viz_enabled=True, nb_epochs=2,
+def mnist_tutorial_jsma(train_start=0, train_end=2, test_start=0,
+                        test_end=1, viz_enabled=True, nb_epochs=2,
                         batch_size=128, nb_classes=10, source_samples=10,
                         learning_rate=0.001):
     """
@@ -202,7 +202,7 @@ def main(argv=None):
 
 if __name__ == '__main__':
     flags.DEFINE_boolean('viz_enabled', True, 'Visualize adversarial ex.')
-    flags.DEFINE_integer('nb_epochs', 3, 'Number of epochs to train model')
+    flags.DEFINE_integer('nb_epochs', 4, 'Number of epochs to train model')
     flags.DEFINE_integer('batch_size', 128, 'Size of training batches')
     flags.DEFINE_integer('nb_classes', 10, 'Number of output classes')
     flags.DEFINE_integer('source_samples', 10, 'Nb of test inputs to attack')
