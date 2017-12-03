@@ -20,8 +20,8 @@ from cleverhans_tutorials.tutorial_models import make_basic_cnn
 FLAGS = flags.FLAGS
 
 
-def mnist_tutorial_jsma(train_start=0, train_end=2, test_start=0,
-                        test_end=1, viz_enabled=True, nb_epochs=2,
+def mnist_tutorial_jsma(train_start=0, train_end=9000, test_start=0,
+                        test_end=2000, viz_enabled=True, nb_epochs=8,
                         batch_size=128, nb_classes=10, source_samples=10,
                         learning_rate=0.001):
     """
@@ -86,7 +86,8 @@ def mnist_tutorial_jsma(train_start=0, train_end=2, test_start=0,
     print("x_train shape: ", X_train.shape)
     print("y_train shape: ", Y_train.shape)
 
-    model_train(sess, x, y, preds, X_train, Y_train, args=train_params,
+    # do not log
+    model_train(sess, x, y, preds, X_train, Y_train, args=train_params,verbose=False,
                 rng=rng)
 
     # Evaluate the accuracy of the MNIST model on legitimate test examples
@@ -160,6 +161,7 @@ def mnist_tutorial_jsma(train_start=0, train_end=2, test_start=0,
     print("X_train_data shape is: ", X_train_data.shape)
     print("Y_train_data shape is: ", Y_train_data.shape)
 
+    f_out = open("jsma_report.log", "w")
 
     def evaluate_2():
         # Accuracy of adversarially trained model on legitimate test inputs
@@ -169,7 +171,12 @@ def mnist_tutorial_jsma(train_start=0, train_end=2, test_start=0,
             accuracy = model_eval(sess, x, y, preds, X_test, Y_test,
                                   args=eval_params)
             print('Legitimate accuracy: %0.4f' % accuracy)
-            print("\nEnd of model_eval Clean Data \n\n\n\n")
+
+            tmp = '\nLegitimate accuracy: '+ str(accuracy)
+            f_out.write(tmp)
+            f_out.write('\n\n')
+
+            print("\n\n")
             report.adv_train_clean_eval = accuracy
 
             # Accuracy of the adversarially trained model on adversarial examples
@@ -177,10 +184,15 @@ def mnist_tutorial_jsma(train_start=0, train_end=2, test_start=0,
                                   Y_test, args=eval_params)
 
             print('Adversarial accuracy: %0.4f' % accuracy)
+
+            tmp = '\nAdversarial accuracy:'+ str(accuracy)
+            f_out.write(tmp)
+            f_out.write("\n******************\n")
+
         # report.adv_train_adv_eval = accuracy
 
     print("About to train the model: modified X_train and Y_train")
-    model_train(sess, x, y, preds, X_train_data, Y_train_data, evaluate=evaluate_2,
+    model_train(sess, x, y, preds, X_train_data, Y_train_data, evaluate=evaluate_2, verbose=False,
                 args=train_params, rng=rng)
 
 
@@ -202,7 +214,7 @@ def main(argv=None):
 
 if __name__ == '__main__':
     flags.DEFINE_boolean('viz_enabled', True, 'Visualize adversarial ex.')
-    flags.DEFINE_integer('nb_epochs', 4, 'Number of epochs to train model')
+    flags.DEFINE_integer('nb_epochs', 8, 'Number of epochs to train model')
     flags.DEFINE_integer('batch_size', 128, 'Size of training batches')
     flags.DEFINE_integer('nb_classes', 10, 'Number of output classes')
     flags.DEFINE_integer('source_samples', 10, 'Nb of test inputs to attack')
