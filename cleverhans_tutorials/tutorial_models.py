@@ -16,7 +16,8 @@ class MLP(Model):
     """
     An example of a bare bones multilayer perceptron (MLP) class.
     """
-
+    # input_shape： [None, 28, 28, 1]
+    # layers = [Conv2D, Relu, Conv2D, ..., Flattern, Softmax]
     def __init__(self, layers, input_shape):
         super(MLP, self).__init__()
 
@@ -35,8 +36,12 @@ class MLP(Model):
                 name = layer.__class__.__name__ + str(i)
             self.layer_names.append(name)
 
+            # set current layer's input as previous's
+            # layer's 4-D tensor config
+
             layer.set_input_shape(input_shape)
             input_shape = layer.get_output_shape()
+
 
     def fprop(self, x, set_ref=False):
         states = []
@@ -83,6 +88,8 @@ class Conv2D(Layer):
 
     def set_input_shape(self, input_shape):
         batch_size, rows, cols, input_channels = input_shape
+        # kernel_shape is 4-D tensor that defined by
+        # (x_w, y_w, input_channel, output_channel)
         kernel_shape = tuple(self.kernel_shape) + (input_channels,
                                                    self.output_channels)
         assert len(kernel_shape) == 4
@@ -102,6 +109,14 @@ class Conv2D(Layer):
         self.output_shape = tuple(output_shape)
 
     def fprop(self, x):
+        # sampel usage:
+        # xw = tf.nn.conv2d(x_im, w1,
+        #      stride = [1,1,1,1], padding='SAME')
+
+        # debug for checking tmp
+        tmp = tf.nn.conv2d(x, self.kernels, (1,) + tuple(self.strides) + (1,),
+                            self.padding)
+
         return tf.nn.conv2d(x, self.kernels, (1,) + tuple(self.strides) + (1,),
                             self.padding) + self.b
 
@@ -115,6 +130,7 @@ class ReLU(Layer):
         self.input_shape = shape
         self.output_shape = shape
 
+    # Relu's output_shape is exact it's input shape
     def get_output_shape(self):
         return self.output_shape
 
@@ -154,9 +170,153 @@ class Flatten(Layer):
 
 def make_basic_cnn(nb_filters=64, nb_classes=10,
                    input_shape=(None, 28, 28, 1)):
+
+    # layers are a list of objects
     layers = [Conv2D(nb_filters, (8, 8), (2, 2), "SAME"),
               ReLU(),
               Conv2D(nb_filters * 2, (6, 6), (2, 2), "VALID"),
+              ReLU(),
+              Conv2D(nb_filters * 2, (5, 5), (1, 1), "VALID"),
+              ReLU(),
+              Flatten(),
+              Linear(nb_classes),
+              Softmax()]
+
+    model = MLP(layers, input_shape)
+    return model
+
+
+# make cnn model
+def make_5_cnn(nb_filters=64, nb_classes=10,
+                   input_shape=(None, 28, 28, 1)):
+    # layers are a list of objects
+    layers = [Conv2D(nb_filters, (8, 8), (1, 1), "SAME"),
+              ReLU(),
+              Conv2D(nb_filters * 2, (6, 6), (1, 1), "SAME"),
+              ReLU(),
+              Conv2D(nb_filters * 2, (6, 6), (1, 1), "SAME"),
+              ReLU(),
+              Conv2D(nb_filters * 2, (6, 6), (1, 1), "SAME"),
+              ReLU(),
+              Conv2D(nb_filters * 2, (3, 3), (2, 2), "VALID"),
+              ReLU(),
+              Flatten(),
+              Linear(nb_classes),
+              Softmax()]
+
+    model = MLP(layers, input_shape)
+    return model
+
+
+# make cnn model ==> looking @ finer kernel
+def make_5_cnn_small(nb_filters=64, nb_classes=10,
+                   input_shape=(None, 28, 28, 1)):
+    # layers are a list of objects
+    layers = [Conv2D(nb_filters, (4, 4), (1, 1), "SAME"),
+              ReLU(),
+              Conv2D(nb_filters * 3, (9, 9), (1, 1), "SAME"),
+              ReLU(),
+              Conv2D(nb_filters * 2, (6, 6), (1, 1), "SAME"),
+              ReLU(),
+              Conv2D(nb_filters, (4, 4), (1, 1), "SAME"),
+              ReLU(),
+              Conv2D(int(nb_filters/2), (3, 3), (2, 2), "VALID"),
+              ReLU(),
+              Flatten(),
+              Linear(nb_classes),
+              Softmax()]
+
+    model = MLP(layers, input_shape)
+    return model
+
+# looking @ 12, 12 instead of 8,8
+def make_5_cnn_large(nb_filters=64, nb_classes=10,
+                   input_shape=(None, 28, 28, 1)):
+    # layers are a list of objects
+    layers = [Conv2D(nb_filters, (12, 12), (1, 1), "SAME"),
+              ReLU(),
+              Conv2D(nb_filters, (9, 9), (1, 1), "SAME"),
+              ReLU(),
+              Conv2D(nb_filters * 2, (6, 6), (1, 1), "SAME"),
+              ReLU(),
+              Conv2D(nb_filters, (4, 4), (1, 1), "SAME"),
+              ReLU(),
+              Conv2D( int(nb_filters/2), (3, 3), (2, 2), "VALID"),
+              ReLU(),
+              Flatten(),
+              Linear(nb_classes),
+              Softmax()]
+
+    model = MLP(layers, input_shape)
+    return model
+
+# changes # of perceptons in Conv2D layer
+def make_cnn_percepton(nb_filters=64, nb_classes=10,
+                   input_shape=(None, 28, 28, 1)):
+
+    # layers are a list of objects
+    # change the kernel shape and therefore adjusting the weight matrix
+    layers = [Conv2D(nb_filters, (12, 12), (1, 1), "SAME"),
+              ReLU(),
+              Conv2D(nb_filters, (4, 4), (1, 1), "VALID"),
+              ReLU(),
+              Conv2D(nb_filters * 2, (3, 3), (2, 2), "VALID"),
+              ReLU(),
+              Flatten(),
+              Linear(nb_classes),
+              Softmax()]
+
+    model = MLP(layers, input_shape)
+    return model
+
+# changes # of perceptons in Conv2D layer ==> chagne to 20
+def make_cnn_filter(nb_filters=20, nb_classes=10,
+                   input_shape=(None, 28, 28, 1)):
+
+    # layers are a list of objects
+    # change the kernel shape and therefore adjusting the weight matrix
+    layers = [Conv2D(nb_filters, (8, 12), (1, 1), "SAME"),
+              ReLU(),
+              Conv2D(nb_filters, (4, 4), (1, 1), "VALID"),
+              ReLU(),
+              Conv2D(nb_filters * 2, (3, 3), (2, 2), "VALID"),
+              ReLU(),
+              Flatten(),
+              Linear(nb_classes),
+              Softmax()]
+
+    model = MLP(layers, input_shape)
+    return model
+
+
+# change kernel to a larger size
+def make_cnn_filter(nb_filters=20, nb_classes=10,
+                   input_shape=(None, 28, 28, 1)):
+
+    # layers are a list of objects
+    # change the kernel shape and therefore adjusting the weight matrix
+    layers = [Conv2D(nb_filters, (8, 8), (2, 2), "SAME"),
+              ReLU(),
+              Conv2D(nb_filters * 2, (6, 6), (2, 2), "VALID"),
+              ReLU(),
+              Conv2D(nb_filters * 2, (5, 5), (1, 1), "VALID"),
+              ReLU(),
+              Flatten(),
+              Linear(nb_classes),
+              Softmax()]
+
+    model = MLP(layers, input_shape)
+    return model
+
+# change to larger kernel
+def make_cnn_large_kernel(nb_filters=64, nb_classes=10,
+                   input_shape=(None, 28, 28, 1)):
+
+    # layers are a list of objects
+    # change the kernel shape and therefore adjusting the weight matrix
+    layers = [Conv2D(nb_filters, (14, 14), (1, 1), "SAME"),
+              ReLU(),
+              Conv2D(nb_filters * 2, (8, 8), (1, 1), "VALID"),
               ReLU(),
               Conv2D(nb_filters * 2, (5, 5), (1, 1), "VALID"),
               ReLU(),

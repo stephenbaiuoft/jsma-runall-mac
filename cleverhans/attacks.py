@@ -516,6 +516,7 @@ class SaliencyMapMethod(Attack):
             # Attack is untargeted, target values will be chosen at random
             wrap = tf.py_func(jsma_wrap, [x], tf.float32)
 
+        print("type is wrap is: ", type(wrap))
         return wrap
 
     def parse_params(self, theta=1., gamma=np.inf, nb_classes=None,

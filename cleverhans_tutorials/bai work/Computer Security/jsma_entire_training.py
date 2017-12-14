@@ -4,18 +4,16 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import numpy as np
-from six.moves import xrange
 import tensorflow as tf
 from tensorflow.python.platform import flags
 import logging
 
 from cleverhans.attacks import SaliencyMapMethod
-from cleverhans.utils import other_classes, set_log_level
-from cleverhans.utils import pair_visual, grid_visual, AccuracyReport
+from cleverhans.utils import set_log_level
+from cleverhans.utils import AccuracyReport
 from cleverhans.utils_mnist import data_mnist
-from cleverhans.utils_tf import model_train, model_eval, model_argmax
-from cleverhans.utils_keras import KerasModelWrapper, cnn_model
-from cleverhans_tutorials.tutorial_models import make_basic_cnn
+from cleverhans.utils_tf import model_train, model_eval
+from cleverhans_tutorials import make_basic_cnn
 
 FLAGS = flags.FLAGS
 

@@ -4,30 +4,22 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import numpy as np
-from six.moves import xrange
 import tensorflow as tf
 from tensorflow.python.platform import flags
 import logging
 
 from cleverhans.attacks import SaliencyMapMethod
 from cleverhans.utils import other_classes, set_log_level
-from cleverhans.utils import pair_visual, grid_visual, AccuracyReport
+from cleverhans.utils import AccuracyReport
 from cleverhans.utils_mnist import data_mnist
-from cleverhans.utils_tf import model_train, model_eval, model_argmax
-from cleverhans.utils_keras import KerasModelWrapper, cnn_model
-from cleverhans_tutorials.tutorial_models import make_basic_cnn
-from cleverhans.attacks import FastGradientMethod
-from cleverhans.attacks import ElasticNetMethod
-from cleverhans.attacks import DeepFool
-from cleverhans.attacks import BasicIterativeMethod
-from cleverhans.attacks import CarliniWagnerL2
-
+from cleverhans.utils_tf import model_train, model_eval
+from cleverhans_tutorials import make_basic_cnn
 
 FLAGS = flags.FLAGS
 
 
-def mnist_tutorial_jsma(train_start=0, train_end=5, test_start=0,
-                        test_end=2, viz_enabled=True, nb_epochs=8,
+def mnist_tutorial_jsma(train_start=0, train_end=9000, test_start=0,
+                        test_end=2000, viz_enabled=True, nb_epochs=8,
                         batch_size=128, nb_classes=10, source_samples=10,
                         learning_rate=0.001):
     """
@@ -110,7 +102,7 @@ def mnist_tutorial_jsma(train_start=0, train_end=5, test_start=0,
           ' adversarial examples')
 
 
-    # 1. Instantiate a SaliencyMapMethod attack object
+    # Instantiate a SaliencyMapMethod attack object
     jsma = SaliencyMapMethod(model, back='tf', sess=sess)
     jsma_params = {'theta': 1., 'gamma': 0.1,
                    'clip_min': 0., 'clip_max': 1.,
@@ -119,59 +111,6 @@ def mnist_tutorial_jsma(train_start=0, train_end=5, test_start=0,
     # randomly select for testing
     adv_random = jsma.generate(x, **jsma_params)
     preds_adv_random = model.get_probs(adv_random)
-
-    # 2. Instantiate FGSM attack
-    fgsm_params = {'eps': 0.3,
-                   'clip_min': 0.,
-                   'clip_max': 1.}
-    fgsm = FastGradientMethod(model, sess=sess)
-    adv_x_fgsm = fgsm.generate(x, **fgsm_params)
-    preds_adv_fgsm = model.get_probs(adv_x_fgsm)
-
-
-    # 3. Instantiate Elastic net attack
-    en_params = {'binary_search_steps': 10,
-                 # 'y': None,
-                 'max_iterations': 1000,
-                 'learning_rate': 0.01,
-                 'batch_size': source_samples,
-                 'initial_const': 10,
-                 'beta': 0}
-    enet = ElasticNetMethod(model, sess=sess)
-    adv_x_en = enet.generate(x, **en_params)
-    preds_adv_elastic_net = model.get_probs(adv_x_en)
-
-    # 4. Deepfool
-    deepfool_params = {'nb_candidate':10,
-                       'overshoot':0.02,
-                       'max_iter': 50,
-                       'clip_min': 0.,
-                       'clip_max': 1.}
-    deepfool = DeepFool(model, sess=sess)
-    adv_x_df = deepfool.generate(x, **deepfool_params)
-    preds_adv_deepfool = model.get_probs(adv_x_df)
-
-    # 5. Base Iterative
-    bim_params = {'eps': 0.3,
-                  'eps_iter': 0.01,
-                  'nb_iter': 100,
-                  'clip_min': 0.,
-                  'clip_max': 1.}
-    base_iter = BasicIterativeMethod(model, sess=sess)
-    adv_x_bi = base_iter.generate(x, **bim_params)
-    preds_adv_base_iter = model.get_probs(adv_x_bi)
-
-    # 6. C & W Attack
-    cw = CarliniWagnerL2(model, back='tf', sess=sess)
-    cw_params = {'binary_search_steps': 1,
-                 # 'y': None,
-                 'max_iterations': 100,
-                 'learning_rate': 0.1,
-                 'batch_size': source_samples,
-                 'initial_const': 10}
-    adv_x_cw = cw.generate(x, **cw_params)
-    preds_adv_cw = model.get_probs(adv_x_cw)
-
 
     # ==> generate 10 targeted classes for every train data regardless
     # This call runs the Jacobian-based saliency map approach
@@ -220,96 +159,45 @@ def mnist_tutorial_jsma(train_start=0, train_end=5, test_start=0,
     print("X_train_data shape is: ", X_train_data.shape)
     print("Y_train_data shape is: ", Y_train_data.shape)
 
-    # saves the output so later no need to re-fun file
-    np.savez("jsma_training_data.npz", x_train=X_train_data
-             , y_train=Y_train_data)
+    f_out = open("jsma_report.log", "w")
 
-    # >>> data = np.load('/tmp/123.npz')
-    # >>> data['a']
-
-    f_out = open("jsma_elastic_against5.log", "w")
-
-    # evaluate the function against 5 attacks
-    # fgsm, base iterative, jsma, elastic net, and deepfool
-    def evaluate_against_all():
-            # 1 Clean Data
+    def evaluate_2():
+        # Accuracy of adversarially trained model on legitimate test inputs
             eval_params = {'batch_size': batch_size}
+
+            print("\nStart model_val Clean Data ")
             accuracy = model_eval(sess, x, y, preds, X_test, Y_test,
                                   args=eval_params)
             print('Legitimate accuracy: %0.4f' % accuracy)
 
-            tmp = 'Legitimate accuracy: '+ str(accuracy + "\n")
+            tmp = '\nLegitimate accuracy: '+ str(accuracy)
             f_out.write(tmp)
+            f_out.write('\n\n')
 
+            print("\n\n")
+            report.adv_train_clean_eval = accuracy
 
-            # 2 JSMA
+            # Accuracy of the adversarially trained model on adversarial examples
             accuracy = model_eval(sess, x, y, preds_adv_random, X_test,
                                   Y_test, args=eval_params)
 
-            print('JSMA accuracy: %0.4f' % accuracy)
-            tmp = 'JSMA accuracy:'+ str(accuracy + "\n")
+            print('Adversarial accuracy: %0.4f' % accuracy)
+
+            tmp = '\nAdversarial accuracy:'+ str(accuracy)
             f_out.write(tmp)
-
-
-            # 3 FGSM
-            accuracy = model_eval(sess, x, y, preds_adv_fgsm, X_test,
-                                  Y_test, args=eval_params)
-
-            print('FGSM accuracy: %0.4f' % accuracy)
-            tmp = 'FGSM accuracy:' + str(accuracy + "\n")
-            f_out.write(tmp)
-
-            # 4 Base Iterative
-            accuracy = model_eval(sess, x, y, preds_adv_base_iter, X_test,
-                                  Y_test, args=eval_params)
-
-            print('Base Iterative accuracy: %0.4f' % accuracy)
-            tmp = 'Base Iterative accuracy:' + str(accuracy + "\n")
-            f_out.write(tmp)
-
-            # 5 Elastic Net
-            accuracy = model_eval(sess, x, y, preds_adv_elastic_net, X_test,
-                                  Y_test, args=eval_params)
-
-            print('Elastic Net accuracy: %0.4f' % accuracy)
-            tmp = 'Elastic Net accuracy:' + str(accuracy + "\n")
-            f_out.write(tmp)
-
-            # 6 DeepFool
-            accuracy = model_eval(sess, x, y, preds_adv_deepfool, X_test,
-                                  Y_test, args=eval_params)
-            print('DeepFool accuracy: %0.4f' % accuracy)
-            tmp = 'DeepFool accuracy:' + str(accuracy + "\n")
-            f_out.write(tmp)
-
-            # 7 C & W Attack
-            accuracy = model_eval(sess, x, y, preds_adv_cw, X_test,
-                                  Y_test, args=eval_params)
-            print('C & W accuracy: %0.4f' % accuracy)
-            tmp = 'C & W  accuracy:' + str(accuracy + "\n")
-            f_out.write(tmp)
-
-            f_out.write("*******End of Epoch***********\n\n")
+            f_out.write("\n******************\n")
 
         # report.adv_train_adv_eval = accuracy
 
-    print("Now Adversarial Training with Elastic Net  + modified X_train and Y_train")
-    # trained_model.out
-    train_params = {
-        'nb_epochs': nb_epochs,
-        'batch_size': batch_size,
-        'learning_rate': learning_rate,
-        'train_dir': '/home/stephen/PycharmProjects/jsma-runall-mac/',
-        'filename': 'trained_model.out'
-    }
-    model_train(sess, x, y, preds, X_train_data, Y_train_data,
-                save=True, predictions_adv=preds_adv_elastic_net,
-                evaluate=evaluate_against_all, verbose=False,
+    print("About to train the model: modified X_train and Y_train")
+    model_train(sess, x, y, preds, X_train_data, Y_train_data, evaluate=evaluate_2, verbose=False,
                 args=train_params, rng=rng)
 
 
     # Close TF session
     sess.close()
+
+
     return report
 
 

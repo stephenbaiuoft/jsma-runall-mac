@@ -66,7 +66,7 @@ def initialize_uninitialized_global_variables(sess):
 
 
 def model_train(sess, x, y, predictions, X_train, Y_train, save=False,
-                predictions_adv=None, init_all=True, evaluate=None,
+                predictions_adv=None, init_all=True, evaluate=None, eva_p0=None, eva_p1=None,
                 verbose=True, feed=None, args=None, rng=None):
     """
     Train a TF graph
@@ -120,12 +120,9 @@ def model_train(sess, x, y, predictions, X_train, Y_train, save=False,
     # Define loss
     loss = model_loss(y, predictions)
     if predictions_adv is not None:
-        count = 0
-        for pred_adv in predictions_adv:
-            count += 1
-            loss += model_loss(y, pred_adv)
+        loss += model_loss(y, predictions_adv)
         # over all pred_adv
-        loss /= count
+    loss /= 2
 
 
     train_step = tf.train.AdamOptimizer(learning_rate=args.learning_rate)
@@ -171,7 +168,7 @@ def model_train(sess, x, y, predictions, X_train, Y_train, save=False,
                 _logger.info("Epoch " + str(epoch) + " took " +
                              str(cur - prev) + " seconds")
             if evaluate is not None:
-                evaluate()
+                evaluate(eva_p0, eva_p1)
 
         if save:
             save_path = os.path.join(args.train_dir, args.filename)

@@ -4,14 +4,13 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import numpy as np
-from six.moves import xrange
 import tensorflow as tf
 from tensorflow.python.platform import flags
 
 import logging
 import os
 from cleverhans.attacks import CarliniWagnerL2
-from cleverhans.utils import pair_visual, grid_visual, AccuracyReport
+from cleverhans.utils import grid_visual, AccuracyReport
 from cleverhans.utils import set_log_level
 from cleverhans.utils_mnist import data_mnist
 from cleverhans.utils_tf import model_train, model_eval, tf_model_load
@@ -205,7 +204,6 @@ def mnist_tutorial_cw(train_start=0, train_end=60000, test_start=0,
 
     # Finally, block & display a grid of all the adversarial examples
     if viz_enabled:
-        import matplotlib.pyplot as plt
         _ = grid_visual(grid_viz_data)
 
     return report

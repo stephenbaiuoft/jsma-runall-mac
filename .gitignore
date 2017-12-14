@@ -3,6 +3,13 @@ __pycache__/
 *.py[cod]
 *$py.class
 .idea/
+saver/
+trained_model.*
+jsma_training_data.*
+cleverhans_tutorials/bai work/saver/cnn_weight_test.ckpt.*
+cleverhans_tutorials/bai work/Computer Security/jsma_training_data.*
+cleverhans_tutorials/bai work/saver/
+jsma_training_data.npz
 
 # C extensions
 *.so

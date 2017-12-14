@@ -357,16 +357,18 @@ def create_logger(name):
     """
     base = logging.getLogger("cleverhans")
     cwd = os.getcwd()
-    hdlr = logging.FileHandler(cwd + '/logs/cleverhans_app.log')
+
+    # print("creating file at: ", cwd + '/logs/cleverhans_app.log')
+    # hdlr = logging.FileHandler(cwd + '/logs/cleverhans_app.log')
 
     if len(base.handlers) == 0:
         ch = logging.StreamHandler()
         formatter = logging.Formatter('[%(levelname)s %(asctime)s %(name)s] ' +
                                       '%(message)s')
         ch.setFormatter(formatter)
-        hdlr.setFormatter(formatter)
+        # hdlr.setFormatter(formatter)
         base.addHandler(ch)
-        base.addHandler(hdlr)
+        # base.addHandler(hdlr)
 
 
     return base
