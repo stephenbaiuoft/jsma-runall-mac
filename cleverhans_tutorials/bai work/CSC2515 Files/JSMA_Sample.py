@@ -25,9 +25,10 @@ from cleverhans.attacks import SaliencyMapMethod
 
 FLAGS = flags.FLAGS
 
+# quickly test data samples
 
-def evaluate_weight(train_start=0, train_end=3000, test_start=0,
-                   test_end=500, nb_epochs=1, batch_size=128,
+def evaluate_weight(train_start=0, train_end=1, test_start=0,
+                   test_end=1, nb_epochs=1, batch_size=128,
                    learning_rate=0.001,
                    clean_train=True,
                    testing=False,
@@ -52,7 +53,11 @@ def evaluate_weight(train_start=0, train_end=3000, test_start=0,
     :param clean_train: if true, train on clean examples
     :return: an AccuracyReport object
     """
-    model_save_path = '/home/stephen/PycharmProjects/jsma-runall-mac/cleverhans_tutorials/bai work/CSC2515 Files/saver/'
+    model_save_path = '/home/stephen/PycharmProjects/jsma-runall-mac/cleverhans_tutorials/' \
+                      'bai work/CSC2515 Files/saver/tmp/'
+    # to CSC2515 Files
+    relative_path_2515 = '/home/stephen/PycharmProjects/jsma-runall-mac/cleverhans_tutorials/' \
+                      'bai work/CSC2515 Files/tmp/'
 
     # Object used to keep track of (and return) key accuracies
     report = AccuracyReport()
@@ -230,49 +235,46 @@ def evaluate_weight(train_start=0, train_end=3000, test_start=0,
     save_path = saver.save(sess, model_save_path + model_sess_name)
     print("Model saved in file: %s" % save_path)
 
-
-
-    # to CSC2515 Files
-    relative_path_2515 = '/home/stephen/PycharmProjects/jsma-runall-mac/cleverhans_tutorials/' \
-                      'bai work/CSC2515 Files/'
     # saves the output so later no need to re-fun file
     np_data_path = 'saver/numpy_data/'
 
     # baseline weights
-    weight_set_baseline = evaluate_model_tensor(model_baseline, sess, f_out)
+    weight_set_baseline = evaluate_model_tensor(model_baseline, sess)
     np.savez(relative_path_2515 + np_data_path + 'model_baseline_weights.npz',
              conv_weights= weight_set_baseline)
 
-    weight_set_0 = evaluate_model_tensor(model_0, sess, f_out)
+    weight_set_0 = evaluate_model_tensor(model_0, sess)
     np.savez(relative_path_2515 + np_data_path + 'model_0_weights.npz', conv_weights= weight_set_0)
 
 
-    weight_set_1 = evaluate_model_tensor(model_1, sess, f_out)
+    weight_set_1 = evaluate_model_tensor(model_1, sess)
     # saves the output so later no need to re-fun file
     np.savez(relative_path_2515 + np_data_path + 'model_1_weights.npz', conv_weights= weight_set_1)
 
-    weight_set_2 = evaluate_model_tensor(model_2, sess, f_out)
+    weight_set_2 = evaluate_model_tensor(model_2, sess)
     np.savez(relative_path_2515 + np_data_path + 'model_2_weights.npz', conv_weights= weight_set_2)
 
 
-    weight_set_3 = evaluate_model_tensor(model_3, sess, f_out)
+    weight_set_3 = evaluate_model_tensor(model_3, sess)
     np.savez(relative_path_2515 + np_data_path + 'model_3_weights.npz', conv_weights= weight_set_3)
 
-    weight_set_4 = evaluate_model_tensor(model_4, sess, f_out)
+    weight_set_4 = evaluate_model_tensor(model_4, sess)
     np.savez(relative_path_2515 + np_data_path + 'model_4_weights.npz', conv_weights= weight_set_4)
+
+    # >>> data = np.load('/tmp/123.npz')
+    # >>> data['a']
+
 
     # f_out.write('\nJSMA Tensor saved in: ' + jsma_save_path + '\n')
     f_out.write('\n\nModel saved in file: ' + save_path +'\n')
-
-
-
 
     # close the file
     f_out.close()
 
 
+
 # evaluates model tensor and return the concatenated weight set
-def evaluate_model_tensor(model, sess_default, f_out):
+def evaluate_model_tensor(model, sess_default):
     # get model layers
     model_layers = model.layers
     weight_set = []
@@ -282,13 +284,9 @@ def evaluate_model_tensor(model, sess_default, f_out):
             np_weight = l.kernels.eval(session=sess_default)
             # sanity check
             print("shape is: ", np_weight.shape)
-            f_out.write("shape is: " + str( np_weight.shape) + '\n')
-
             weight_set.append(np_weight)
 
-    print("*****End of Model Weight********\n")
-    f_out.write("*****End of Model Weight********\n")
-
+    print("\n*****End of Model Weight********\n")
     return weight_set
 
 
