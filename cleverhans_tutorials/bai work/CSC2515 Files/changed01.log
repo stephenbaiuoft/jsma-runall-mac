@@ -1,0 +1,42 @@
+Model 0: 5 basic cnn layer with
+
+    layers = [Conv2D(nb_filters, (8, 8), (1, 1), "SAME"),
+              ReLU(),
+              Conv2D(nb_filters * 2, (6, 6), (1, 1), "SAME"),
+              ReLU(),
+              Conv2D(nb_filters * 2, (6, 6), (1, 1), "SAME"),
+              ReLU(),
+              Conv2D(nb_filters * 2, (6, 6), (1, 1), "SAME"),
+              ReLU(),
+              Conv2D(nb_filters * 2, (3, 3), (2, 2), "VALID"),
+              ReLU(),
+              Flatten(),
+              Linear(nb_classes),
+              Softmax()]
+
+Model 1 is the exact same weight
+
+Test accuracy on legitimate examples: 0.800000011126
+Test accuracy on adversarial examples: 0.0566666669647
+Test accuracy on legitimate examples: 0.91333334287
+Test accuracy on adversarial examples: 0.0300000001987
+Test accuracy on legitimate examples: 0.94666667064
+Test accuracy on adversarial examples: 0.060000000298
+Model 0
+Test accuracy on legitimate examples: 0.860000007947
+Test accuracy on adversarial examples:  0.0733333336314
+Model 0
+Test accuracy on legitimate examples: 0.933333337307
+Test accuracy on adversarial examples:  0.113333333731
+Model 0
+Test accuracy on legitimate examples: 0.953333339691
+Test accuracy on adversarial examples:  0.0966666666667
+Model 1
+Test accuracy on legitimate examples:  0.849999998411
+Test accuracy on adversarial examples: 0.0733333334327
+Model 1
+Test accuracy on legitimate examples:  0.956666661898
+Test accuracy on adversarial examples: 0.126666666865
+Model 1
+Test accuracy on legitimate examples:  0.966666669846
+Test accuracy on adversarial examples: 0.110000000497

@@ -1,0 +1,29 @@
+Identical Models but with different random state variables
+
+Testaccuracy on adversarial examples:0.0333
+Testaccuracy on legitimate examples:0.9467
+Testaccuracy on adversarial examples:0.0467
+
+Model0
+Testaccuracy on legitimate examples:0.8700
+Testaccuracy on adversarial examples:0.0867
+
+Model0
+Testaccuracy on legitimate examples:0.9267
+Testaccuracy on adversarial examples:0.1300
+
+Model0
+Testaccuracyonlegitimate examples:0.9467
+Testaccuracyonadversarial examples:0.0967
+
+Model1
+Testaccuracyonlegitimate examples:0.8667
+Testaccuracyonadversarial examples:0.0667
+
+Model1
+Testaccuracyonlegitimate examples:0.9400
+Testaccuracyonadversarial examples:0.1067
+
+Model1
+Testaccuracyonlegitimate examples:0.9500
+Testaccuracyonadversarial examples:0.1033

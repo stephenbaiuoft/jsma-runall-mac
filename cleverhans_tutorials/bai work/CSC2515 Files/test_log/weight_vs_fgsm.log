@@ -1,0 +1,71 @@
+No Significant Improvement
+
+[INFO 2017-12-13 22:30:20,494 cleverhans] Epoch 0 took 35.63838243484497 seconds
+Test accuracy on legitimate examples: 0.9761
+Test accuracy on adversarial examples: 0.8277
+[INFO 2017-12-13 22:30:59,884 cleverhans] Epoch 1 took 35.323513984680176 seconds
+Test accuracy on legitimate examples: 0.9865
+Test accuracy on adversarial examples: 0.8825
+[INFO 2017-12-13 22:31:40,017 cleverhans] Epoch 2 took 36.03635382652283 seconds
+Test accuracy on legitimate examples: 0.9894
+Test accuracy on adversarial examples: 0.9282
+[INFO 2017-12-13 22:32:21,534 cleverhans] Epoch 3 took 37.24925971031189 seconds
+Test accuracy on legitimate examples: 0.9886
+Test accuracy on adversarial examples: 0.9260
+[INFO 2017-12-13 22:33:02,694 cleverhans] Epoch 4 took 36.58517599105835 seconds
+Test accuracy on legitimate examples: 0.9904
+Test accuracy on adversarial examples: 0.9419
+[INFO 2017-12-13 22:33:42,826 cleverhans] Epoch 5 took 35.93776082992554 seconds
+Test accuracy on legitimate examples: 0.9887
+Test accuracy on adversarial examples: 0.9419
+[INFO 2017-12-13 22:33:46,993 cleverhans] Completed model training.
+[INFO 2017-12-13 22:34:03,510 cleverhans] Epoch 0 took 16.129334926605225 seconds
+Model 0
+Test accuracy on legitimate examples: 0.9871
+Test accuracy on adversarial examples: 0.0821
+[INFO 2017-12-13 22:34:23,859 cleverhans] Epoch 1 took 16.109259366989136 seconds
+Model 0
+Test accuracy on legitimate examples: 0.9907
+Test accuracy on adversarial examples: 0.0821
+[INFO 2017-12-13 22:34:43,898 cleverhans] Epoch 2 took 15.831931352615356 seconds
+Model 0
+Test accuracy on legitimate examples: 0.9907
+Test accuracy on adversarial examples: 0.0821
+[INFO 2017-12-13 22:35:03,929 cleverhans] Epoch 3 took 15.88028359413147 seconds
+Model 0
+Test accuracy on legitimate examples: 0.9921
+Test accuracy on adversarial examples: 0.0821
+[INFO 2017-12-13 22:35:23,896 cleverhans] Epoch 4 took 15.753227949142456 seconds
+Model 0
+Test accuracy on legitimate examples: 0.9925
+Test accuracy on adversarial examples: 0.0821
+[INFO 2017-12-13 22:35:44,260 cleverhans] Epoch 5 took 16.14065194129944 seconds
+Model 0
+Test accuracy on legitimate examples: 0.9919
+[INFO 2017-12-13 22:35:48,449 cleverhans] Completed model training.
+Test accuracy on adversarial examples: 0.0821
+[INFO 2017-12-13 22:36:05,294 cleverhans] Epoch 0 took 16.142457723617554 seconds
+Model 1
+Test accuracy on legitimate examples: 0.9885
+Test accuracy on adversarial examples: 0.1044
+[INFO 2017-12-13 22:36:25,419 cleverhans] Epoch 1 took 16.04112720489502 seconds
+Model 1
+Test accuracy on legitimate examples: 0.9903
+Test accuracy on adversarial examples: 0.1044
+[INFO 2017-12-13 22:36:45,771 cleverhans] Epoch 2 took 16.184817790985107 seconds
+Model 1
+Test accuracy on legitimate examples: 0.9921
+Test accuracy on adversarial examples: 0.1044
+[INFO 2017-12-13 22:37:05,892 cleverhans] Epoch 3 took 15.777053594589233 seconds
+Model 1
+Test accuracy on legitimate examples: 0.9917
+Test accuracy on adversarial examples: 0.1044
+[INFO 2017-12-13 22:37:25,750 cleverhans] Epoch 4 took 15.644556045532227 seconds
+Model 1
+Test accuracy on legitimate examples: 0.9915
+Test accuracy on adversarial examples: 0.1044
+[INFO 2017-12-13 22:37:45,376 cleverhans] Epoch 5 took 15.510316610336304 seconds
+Model 1
+Test accuracy on legitimate examples: 0.9922
+[INFO 2017-12-13 22:37:49,605 cleverhans] Completed model training.
+Test accuracy on adversarial examples: 0.1044

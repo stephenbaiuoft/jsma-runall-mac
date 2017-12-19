@@ -95,51 +95,121 @@ def evaluate_pca(train_start=0, train_end=3000, test_start=0,
     #####BASELINE 4 models of 25, 36, 49, 100,
     ###########################################################
 
-    # >>> data = np.load('/tmp/123.npz')
-    # >>> data['a']
-    # load JSMA numpy array
-    np_jsma_data_path = 'saver/numpy_jsma_x_data/'
-    file = 'jsma_testing_x.npz'
-    data = np.load(relative_path_2515 + np_jsma_data_path + file)
-    X_jsma_testing  = data['testing_jsma_x']
 
-    # Temporary solution: ===> terminal to compute PCA...
-    np_jsma_pca_data_path ='saver/numpy_pca_data/'
-    filename_25 = 'pca25.npz'
-    data_25 = np.load(relative_path_2515 + np_jsma_pca_data_path + filename_25)
-    X_jsma_testing_pca_0 = data_25['ift25']
 
-    X_jsma_testing_pca_0 = X_jsma_testing_pca_0.reshape(-1,28, 28,1)
 
+    jsma = SaliencyMapMethod(model, back='tf', sess=sess)
+    jsma_params = {'theta': 1., 'gamma': 0.1,
+                   'clip_min': 0., 'clip_max': 1.,
+                   'y_target': None}
+
+    adv_x_2 = jsma.generate(x, **jsma_params)
+    preds_2_adv = model(adv_x_2)
 
     # evaluation function for other comparisons
     def evaluate(model_name=None, model_pred=None):
         # Accuracy of adversarially trained model on legitimate test inputs
         eval_params = {'batch_size': batch_size}
-
         accuracy = model_eval(sess, x, y, preds, X_test, Y_test,
                               args=eval_params)
         print(model_name + '\nTest accuracy on legitimate examples: %0.4f' % accuracy)
         f_out.write('\n\n' + model_name + '\nTest accuracy on legitimate examples: '+str(accuracy) + '\n')
 
         # Accuracy of the adversarially trained model on adversarial examples
-        accuracy = model_eval(sess, x, y, preds, X_jsma_testing,
+        accuracy = model_eval(sess, x, y, preds_2_adv, X_jsma_testing,
                               Y_test, args=eval_params)
-        print('Test accuracy on unfiltered adversarial examples: %0.4f' % accuracy)
-        f_out.write('Test accuracy on unfiltered adversarial examples:  ' + str(accuracy) + '\n')
+        print('Test accuracy on adversarial examples: %0.4f' % accuracy)
+        f_out.write('Test accuracy on adversarial examples:  ' + str(accuracy) + '\n')
 
-        # Accuracy of the adversarially filtered trained model on adversarial examples
-        accuracy = model_eval(sess, x, y, preds, X_jsma_testing_pca_0 ,
-                              Y_test, args=eval_params)
-        print('Test accuracy on PCA filtered adversarial examples: %0.4f' % accuracy)
-        f_out.write('Test accuracy on PCA filtered adversarial examples:  ' + str(accuracy) + '\n')
 
     eva_p0 = "Model 0, with PCA components = 5 x 5"
     # now train the model
     model_train(sess, x, y, preds, X_train, Y_train,
-                evaluate=evaluate,
+                evaluate=None,
                 eva_p0=eva_p0, eva_p1=None,
                 args=train_params, rng=rng)
+
+    # saving model testing_jsma_samples
+    np_jsma_data_path = 'saver/numpy_jsma_x_data/'
+
+    feed_dict = {x: X_test}
+    X_jsma_testing = sess.run(adv_x_2, feed_dict = feed_dict)
+    print("X_jsma_testing shape is:\n", X_jsma_testing.shape)
+
+    # For Saving ==> Not Required in this case
+    # print("testing JSMA examples --> shape is:", testing_jsma_x.shape)
+    # f_out.write("testing JSMA examples --> shape is: " + str(testing_jsma_x.shape) + '\n')
+    # np.savez(relative_path_2515 + np_jsma_data_path + 'jsma_testing_x.npz', testing_jsma_x=testing_jsma_x)
+
+    # file = 'jsma_testing_x.npz'
+    # data = np.load(relative_path_2515 + np_jsma_data_path + file)
+    # X_jsma_testing = data['testing_jsma_x']
+
+    # Temporary solution: ===> terminal to compute PCA...
+    X_jsma_testing_pca_0 = pca_filter(X_jsma_testing, 5)
+    X_jsma_testing_pca_1 = pca_filter(X_jsma_testing, 7)
+    X_jsma_testing_pca_2 = pca_filter(X_jsma_testing, 9)
+    X_jsma_testing_pca_3 = pca_filter(X_jsma_testing, 10)
+
+    X_test_pca_0 = pca_filter(X_test, 5)
+    X_test_pca_1 = pca_filter(X_test, 7)
+    X_test_pca_2 = pca_filter(X_test, 9)
+    X_test_pca_3 = pca_filter(X_test, 10)
+
+    eval_params = {'batch_size': batch_size}
+
+
+    accuracy = model_eval(sess, x, y, preds, X_jsma_testing,
+                          Y_test, args=eval_params)
+    print('[NP Evaluation Unfiltered] Test accuracy on adversarial examples: %0.4f' % accuracy)
+    f_out.write('[NP Evaluation Unfiltered] Test accuracy on adversarial examples:  ' + str(accuracy) + '\n')
+
+
+    accuracy = model_eval(sess, x, y, preds, X_test_pca_0,
+                          Y_test, args=eval_params)
+    print('Model_0 [NP Evaluation Filtered] Test accuracy on CLEAN examples: %0.4f' % accuracy)
+    f_out.write('Model_0 [NP Evaluation Filtered] Test accuracy on CLEAN examples:  ' + str(accuracy) + '\n')
+    accuracy = model_eval(sess, x, y, preds, X_jsma_testing_pca_0,
+                          Y_test, args=eval_params)
+    print('Model_0 [NP Evaluation Filtered] Test accuracy on adversarial examples: %0.4f' % accuracy)
+    f_out.write('Filter_0 [NP Evaluation Filtered] Test accuracy on adversarial examples:  ' + str(accuracy) + '\n')
+
+
+    accuracy = model_eval(sess, x, y, preds, X_test_pca_1,
+                          Y_test, args=eval_params)
+    print('Model_1 [NP Evaluation Filtered] Test accuracy on CLEAN examples: %0.4f' % accuracy)
+    f_out.write('Model_1 [NP Evaluation Filtered] Test accuracy on CLEAN examples:  ' + str(accuracy) + '\n')
+    accuracy = model_eval(sess, x, y, preds, X_jsma_testing_pca_1,
+                          Y_test, args=eval_params)
+    print('Model_1 [NP Evaluation Filtered] Test accuracy on adversarial examples: %0.4f' % accuracy)
+    f_out.write('Filter_1 [NP Evaluation Filtered] Test accuracy on adversarial examples:  ' + str(accuracy) + '\n')
+
+
+    accuracy = model_eval(sess, x, y, preds, X_test_pca_2,
+                          Y_test, args=eval_params)
+    print('Model_2 [NP Evaluation Filtered] Test accuracy on CLEAN examples: %0.4f' % accuracy)
+    f_out.write('Model_2 [NP Evaluation Filtered] Test accuracy on CLEAN examples:  ' + str(accuracy) + '\n')
+    accuracy = model_eval(sess, x, y, preds, X_jsma_testing_pca_2,
+                          Y_test, args=eval_params)
+    print('Model_2 [NP Evaluation Filtered] Test accuracy on adversarial examples: %0.4f' % accuracy)
+    f_out.write('Filter_2 [NP Evaluation Filtered] Test accuracy on adversarial examples:  ' + str(accuracy) + '\n')
+
+    accuracy = model_eval(sess, x, y, preds, X_test_pca_3,
+                          Y_test, args=eval_params)
+    print('Model_3 [NP Evaluation Filtered] Test accuracy on CLEAN examples: %0.4f' % accuracy)
+    f_out.write('Model_3 [NP Evaluation Filtered] Test accuracy on CLEAN examples:  ' + str(accuracy) + '\n')
+    accuracy = model_eval(sess, x, y, preds, X_jsma_testing_pca_3,
+                          Y_test, args=eval_params)
+    print('Model_3 [NP Evaluation Filtered] Test accuracy on adversarial examples: %0.4f' % accuracy)
+    f_out.write('Filter_3 [NP Evaluation Filtered] Test accuracy on adversarial examples:  ' + str(accuracy) + '\n')
+
+    # np_jsma_pca_data_path ='saver/numpy_pca_data/'
+    # filename_25 = 'pca25.npz'
+    # data_25 = np.load(relative_path_2515 + np_jsma_pca_data_path + filename_25)
+    # X_jsma_testing_pca_0 = data_25['ift25']
+    # X_jsma_testing_pca_0 = X_jsma_testing_pca_0.reshape(-1,28, 28,1)
+
+
 
 
     # close the file
@@ -151,15 +221,12 @@ def pca_filter(X, n_components):
     # expand out to features
     X_flat = X.reshape(-1, 28*28)
 
-    n_components_total = n_components * n_components
-    pca = PCA(n_components= 25)
+    n_components_total = int(n_components * n_components)
+    pca_tmp = PCA(n_components = n_components_total)
 
-    s_fit = pca.fit(X_flat)
-    s_fit_transform = pca.transform(s_fit)
-
-
+    s_fit_transform = pca_tmp.fit_transform(X_flat)
     # inverse back to original planes
-    X_inverse_flat = pca.inverse_transform(s_fit_transform)
+    X_inverse_flat = pca_tmp.inverse_transform(s_fit_transform)
 
     # back to X_filter
     X_filter = X_inverse_flat.reshape(-1, 28, 28, 1)

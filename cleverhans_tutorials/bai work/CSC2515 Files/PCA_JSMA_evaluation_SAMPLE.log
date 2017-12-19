@@ -1,0 +1,12 @@
+[NP Evaluation Unfiltered] Test accuracy on adversarial examples:  0.0320000001788
+Model_0 [NP Evaluation Filtered] Test accuracy on CLEAN examples:  0.943999993801
+Filter_0 [NP Evaluation Filtered] Test accuracy on adversarial examples:  0.639999996662
+
+Model_1 [NP Evaluation Filtered] Test accuracy on CLEAN examples:  0.96799998188
+Filter_1 [NP Evaluation Filtered] Test accuracy on adversarial examples:  0.674000005722
+
+Model_2 [NP Evaluation Filtered] Test accuracy on CLEAN examples:  0.971999993324
+Filter_2 [NP Evaluation Filtered] Test accuracy on adversarial examples:  0.690000006676
+
+Model_3 [NP Evaluation Filtered] Test accuracy on CLEAN examples:  0.967999993324
+Filter_3 [NP Evaluation Filtered] Test accuracy on adversarial examples:  0.45599999404
