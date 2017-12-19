@@ -137,9 +137,10 @@ def evaluate_pca(train_start=0, train_end=3000, test_start=0,
     print("X_jsma_testing shape is:\n", X_jsma_testing.shape)
 
     # For Saving ==> Not Required in this case
-    # print("testing JSMA examples --> shape is:", testing_jsma_x.shape)
-    # f_out.write("testing JSMA examples --> shape is: " + str(testing_jsma_x.shape) + '\n')
-    # np.savez(relative_path_2515 + np_jsma_data_path + 'jsma_testing_x.npz', testing_jsma_x=testing_jsma_x)
+    # Later for drawing purposes
+    print("testing JSMA examples --> shape is:", X_jsma_testing.shape)
+    f_out.write("testing JSMA examples --> shape is: " + str(X_jsma_testing.shape) + '\n')
+    np.savez(relative_path_2515 + np_jsma_data_path + 'jsma_testing_x.npz', testing_jsma_x=X_jsma_testing)
 
     # file = 'jsma_testing_x.npz'
     # data = np.load(relative_path_2515 + np_jsma_data_path + file)
@@ -158,50 +159,55 @@ def evaluate_pca(train_start=0, train_end=3000, test_start=0,
 
     eval_params = {'batch_size': batch_size}
 
+    accuracy = model_eval(sess, x, y, preds, X_test,
+                          Y_test, args=eval_params)
+    print('[Unfiltered + CLEAN] Test accuracy on CLEAN examples: %0.4f' % accuracy)
+    f_out.write('[Unfiltered + CLEAN] Test accuracy on CLEAN examples:  ' + str(accuracy) + '\n')
 
     accuracy = model_eval(sess, x, y, preds, X_jsma_testing,
                           Y_test, args=eval_params)
-    print('[NP Evaluation Unfiltered] Test accuracy on adversarial examples: %0.4f' % accuracy)
-    f_out.write('[NP Evaluation Unfiltered] Test accuracy on adversarial examples:  ' + str(accuracy) + '\n')
+    print('[Unfiltered + Adversarial] Test accuracy on adversarial examples: %0.4f' % accuracy)
+    f_out.write('[Unfiltered + Adversarial] Test accuracy on adversarial examples:  ' + str(accuracy) + '\n\n\n')
 
-
+    ########################################    ########################################
     accuracy = model_eval(sess, x, y, preds, X_test_pca_0,
                           Y_test, args=eval_params)
-    print('Model_0 [NP Evaluation Filtered] Test accuracy on CLEAN examples: %0.4f' % accuracy)
-    f_out.write('Model_0 [NP Evaluation Filtered] Test accuracy on CLEAN examples:  ' + str(accuracy) + '\n')
+    print('[Model_0 NP + Filtered + CLEAN] Test accuracy on CLEAN examples: %0.4f' % accuracy)
+    f_out.write('[Model_0 NP + Filtered + CLEAN] Test accuracy on CLEAN examples:  ' + str(accuracy) + '\n')
     accuracy = model_eval(sess, x, y, preds, X_jsma_testing_pca_0,
                           Y_test, args=eval_params)
-    print('Model_0 [NP Evaluation Filtered] Test accuracy on adversarial examples: %0.4f' % accuracy)
-    f_out.write('Filter_0 [NP Evaluation Filtered] Test accuracy on adversarial examples:  ' + str(accuracy) + '\n')
+    print('[Model_0 NP + Filtered + Adversarial] Test accuracy on adversarial examples: %0.4f' % accuracy)
+    f_out.write('[Model_0 NP + Filtered + Adversarial] Test accuracy on adversarial examples:  ' + str(accuracy) + '\n\n\n')
 
-
+    ########################################    ########################################
     accuracy = model_eval(sess, x, y, preds, X_test_pca_1,
                           Y_test, args=eval_params)
-    print('Model_1 [NP Evaluation Filtered] Test accuracy on CLEAN examples: %0.4f' % accuracy)
-    f_out.write('Model_1 [NP Evaluation Filtered] Test accuracy on CLEAN examples:  ' + str(accuracy) + '\n')
+    print('[Model_1 NP + Filtered + CLEAN] Test accuracy on CLEAN examples: %0.4f' % accuracy)
+    f_out.write('[Model_1 NP + Filtered + CLEAN] Test accuracy on CLEAN examples:  ' + str(accuracy) + '\n')
     accuracy = model_eval(sess, x, y, preds, X_jsma_testing_pca_1,
                           Y_test, args=eval_params)
-    print('Model_1 [NP Evaluation Filtered] Test accuracy on adversarial examples: %0.4f' % accuracy)
-    f_out.write('Filter_1 [NP Evaluation Filtered] Test accuracy on adversarial examples:  ' + str(accuracy) + '\n')
+    print('[Model_1 NP + Filtered + Adversarial] Test accuracy on adversarial examples: %0.4f' % accuracy)
+    f_out.write('[Model_1 NP + Filtered + Adversarial] Test accuracy on adversarial examples:  ' + str(accuracy) + '\n\n\n')
 
-
+    ########################################    ########################################
     accuracy = model_eval(sess, x, y, preds, X_test_pca_2,
                           Y_test, args=eval_params)
-    print('Model_2 [NP Evaluation Filtered] Test accuracy on CLEAN examples: %0.4f' % accuracy)
-    f_out.write('Model_2 [NP Evaluation Filtered] Test accuracy on CLEAN examples:  ' + str(accuracy) + '\n')
+    print('[Model_2 NP + Filtered + CLEAN] Test accuracy on CLEAN examples: %0.4f' % accuracy)
+    f_out.write('[Model_2 NP + Filtered + CLEAN] Test accuracy on CLEAN examples:  ' + str(accuracy) + '\n')
     accuracy = model_eval(sess, x, y, preds, X_jsma_testing_pca_2,
                           Y_test, args=eval_params)
-    print('Model_2 [NP Evaluation Filtered] Test accuracy on adversarial examples: %0.4f' % accuracy)
-    f_out.write('Filter_2 [NP Evaluation Filtered] Test accuracy on adversarial examples:  ' + str(accuracy) + '\n')
+    print('[Model_2 NP + Filtered + Adversarial] Test accuracy on adversarial examples: %0.4f' % accuracy)
+    f_out.write('[Model_2 NP + Filtered + Adversarial] Test accuracy on adversarial examples:  ' + str(accuracy) + '\n\n\n')
 
+    ########################################    ########################################
     accuracy = model_eval(sess, x, y, preds, X_test_pca_3,
                           Y_test, args=eval_params)
-    print('Model_3 [NP Evaluation Filtered] Test accuracy on CLEAN examples: %0.4f' % accuracy)
-    f_out.write('Model_3 [NP Evaluation Filtered] Test accuracy on CLEAN examples:  ' + str(accuracy) + '\n')
+    print('[Model_3 NP Evaluation Filtered + CLEAN] Test accuracy on CLEAN examples: %0.4f' % accuracy)
+    f_out.write('[Model_3 NP Evaluation Filtered + CLEAN] Test accuracy on CLEAN examples:  ' + str(accuracy) + '\n')
     accuracy = model_eval(sess, x, y, preds, X_jsma_testing_pca_3,
                           Y_test, args=eval_params)
-    print('Model_3 [NP Evaluation Filtered] Test accuracy on adversarial examples: %0.4f' % accuracy)
-    f_out.write('Filter_3 [NP Evaluation Filtered] Test accuracy on adversarial examples:  ' + str(accuracy) + '\n')
+    print('[Model_3 NP Evaluation Filtered + Adversarial] Test accuracy on adversarial examples: %0.4f' % accuracy)
+    f_out.write('[Model_3 NP Evaluation Filtered + Adversarial] Test accuracy on adversarial examples:  ' + str(accuracy) + '\n')
 
     # np_jsma_pca_data_path ='saver/numpy_pca_data/'
     # filename_25 = 'pca25.npz'
