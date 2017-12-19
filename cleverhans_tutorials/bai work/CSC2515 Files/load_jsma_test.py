@@ -1,11 +1,3 @@
-# this file is for testing model weights
-"""
-This tutorial shows how to generate some simple adversarial examples
-and train a model using adversarial training using nothing but pure
-TensorFlow.
-It is very similar to mnist_tutorial_keras_tf.py, which does the same
-thing but with a dependence on keras.
-"""
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -35,17 +27,18 @@ def load_jsma_model():
     model_data_t = 'cnn_weight_test.ckpt'
 
     restore_dir = '/home/stephen/PycharmProjects/jsma-runall-mac/cleverhans_tutorials/' \
-                  'bai work/saver/cnn_weight_test.ckpt'
+                  'bai work/CSC2515 Files/saver/cnn_weight_test.ckpt'
 
     tf.reset_default_graph()
     imported_meta = tf.train.import_meta_graph(model_save_path+model_sess_meta)
 
     with tf.Session() as sess:
         # restore to sess
-        imported_meta.restore(sess, model_save_path + model_data)
+        imported_meta.restore(sess, restore_dir)
         # model data failure
         #imported_meta.restore(sess, model_save_path + model_data)
-        print("check what's in a session?")
+        print("successfully restored/loaded back to sess")
+
 
 
 

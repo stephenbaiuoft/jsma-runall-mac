@@ -14,12 +14,16 @@ from cleverhans.attacks import FastGradientMethod
 from cleverhans_tutorials.tutorial_models import *
 from cleverhans.utils import AccuracyReport, set_log_level
 from cleverhans.attacks import SaliencyMapMethod
+from sklearn.decomposition import PCA
 
 FLAGS = flags.FLAGS
 
+# quickly test data samples
+# wanno make sure Training Data is larger than
+# 20 * 20 ==> 400
 
-def evaluate_weight(train_start=0, train_end=3000, test_start=0,
-                   test_end=500, nb_epochs=8, batch_size=128,
+def evaluate_pca(train_start=0, train_end=1, test_start=0,
+                   test_end=1, nb_epochs=1, batch_size=128,
                    learning_rate=0.001,
                    nb_filters=64):
     """
@@ -41,12 +45,11 @@ def evaluate_weight(train_start=0, train_end=3000, test_start=0,
     :param clean_train: if true, train on clean examples
     :return: an AccuracyReport object
     """
-    model_save_path = '/home/stephen/PycharmProjects/jsma-runall-mac/cleverhans_tutorials/bai work/CSC2515 Files/saver/'
-
+    model_save_path = '/home/stephen/PycharmProjects/jsma-runall-mac/cleverhans_tutorials/' \
+                      'bai work/CSC2515 Files/tmp/'
     # to CSC2515 Files
     relative_path_2515 = '/home/stephen/PycharmProjects/jsma-runall-mac/cleverhans_tutorials/' \
-                      'bai work/CSC2515 Files/'
-
+                      'bai work/CSC2515 Files/tmp/'
 
     # Object used to keep track of (and return) key accuracies
     report = AccuracyReport()
@@ -61,7 +64,7 @@ def evaluate_weight(train_start=0, train_end=3000, test_start=0,
 
     # Create TF session
     sess = tf.Session()
-    print("\n\nRunning JSMA Evaluation Test\n")
+    print("\n\nRunning JSMA PCA Evaluation Test\n")
 
 
     # Get MNIST test data
@@ -91,39 +94,90 @@ def evaluate_weight(train_start=0, train_end=3000, test_start=0,
     # rng_0 = np.random.RandomState([2017, 12, 12])
     # rng_1 = np.random.RandomState([2017, 11, 11])
 
-    f_out = open("JSMA_weight_evaluation.log", "w")
-
-    # this is for running 5 cnn?
-    model_0 = make_5_cnn_small(nb_filters=nb_filters)
-    preds_0 = model_0(x)
-
-    model_1 = make_5_cnn_large(nb_filters=nb_filters)
-    preds_1 = model_1(x)
-
-    # change # of perceptons in a model_01
-    model_2 = make_cnn_percepton(nb_filters=nb_filters)
-    preds_2 = model_2(x)
-
-    # change filter size and c effect
-    model_3 = make_cnn_filter(nb_filters=20)
-    preds_3 = model_3(x)
-
-    # change kernel size
-    model_4 = make_cnn_large_kernel(nb_filters=nb_filters)
-    preds_4 = model_4(x)
+    f_out = open(relative_path_2515 + "PCA_JSMA_evaluation_SAMPLE.log", "w")
 
 
-    # Redefine TF model graph
-    model_baseline = make_basic_cnn(nb_filters=nb_filters)
-    preds_baseline = model_baseline(x)
-
-    jsma = SaliencyMapMethod(model_baseline, back='tf', sess=sess)
+    ##########################################################
+    ###Common Training Parameters
+    ##########################################################
     jsma_params = {'theta': 1., 'gamma': 0.1,
                    'clip_min': 0., 'clip_max': 1.,
                    'y_target': None}
 
+    ###########################################################
+    #####BASELINE
+    ###########################################################
+    # Redefine TF model graph
+    model_baseline = make_basic_cnn_pca(nb_filters=nb_filters)
+    preds_baseline = model_baseline(x)
+
+    jsma = SaliencyMapMethod(model_baseline, back='tf', sess=sess)
     adv_x_2 = jsma.generate(x, **jsma_params)
+    # test to get np array
+
     preds_2_adv = model_baseline(adv_x_2)
+
+
+    # pre-process input shape None, 28, 28
+    # in this case, for simplicity--> we always choose
+    # number of components equal to square roots
+    ###########################################################
+    #####BASELINE 4 models of 25, 36, 49, 100,
+    ###########################################################
+    n_components = 5
+    X_train_pca_0 = pca_filter(X_train, n_components)
+    X_test_pca_0 = pca_filter(X_test,n_components)
+    model_0 = make_basic_cnn_pca(nb_filters=nb_filters)
+    x_0 = tf.placeholder(tf.float32, shape=(None, n_components, n_components, 1))
+    preds_0 = model_0(x_0)
+
+    jsma_0 = SaliencyMapMethod(model_0, back='tf', sess=sess)
+    adv_x_0 = jsma_0.generate(x, **jsma_params)
+    # generate the preds_adv_0
+    preds_adv_0 = model_0(adv_x_0)
+
+
+    n_components = 6
+    X_train_pca_1 = pca_filter(X_train, n_components)
+    X_test_pca_1 = pca_filter(X_test,n_components)
+    model_1 = make_basic_cnn_pca(nb_filters=nb_filters)
+    x_1 = tf.placeholder(tf.float32, shape=(None, n_components, n_components, 1))
+    preds_1 = model_1(x_1)
+
+    jsma_1 = SaliencyMapMethod(model_0, back='tf', sess=sess)
+    adv_x_1 = jsma_1.generate(x, **jsma_params)
+    # generate the preds_adv_0
+    preds_adv_1 = model_1(adv_x_1)
+
+
+    n_components = 7
+    X_train_pca_2 = pca_filter(X_train, n_components)
+    X_test_pca_2 = pca_filter(X_test,n_components)
+    # change # of perceptons in a model_01
+    model_2 = make_basic_cnn_pca(nb_filters=nb_filters)
+    x_2 = tf.placeholder(tf.float32, shape=(None, n_components, n_components, 1))
+    preds_2 = model_2(x_2)
+
+    jsma_2 = SaliencyMapMethod(model_0, back='tf', sess=sess)
+    adv_x_2 = jsma_2.generate(x, **jsma_params)
+    # generate the preds_adv_0
+    preds_adv_2 = model_2(adv_x_2)
+
+
+    n_components = 10
+    X_train_pca_3 = pca_filter(X_train, n_components)
+    X_test_pca_3 = pca_filter(X_test,n_components)
+    # change filter size and c effect
+    model_3 = make_basic_cnn_pca(nb_filters=nb_filters)
+    x_3 = tf.placeholder(tf.float32, shape=(None, n_components, n_components, 1))
+    preds_3 = model_3(x_3)
+
+    jsma_3 = SaliencyMapMethod(model_0, back='tf', sess=sess)
+    adv_x_3 = jsma_3.generate(x, **jsma_params)
+    # generate the preds_adv_0
+    preds_adv_3 = model_3(adv_x_3)
+
+
 
     def evaluate_baseline(eva_p0, eva_p1):
         f_out.write("Baseline model\n")
@@ -144,43 +198,29 @@ def evaluate_weight(train_start=0, train_end=3000, test_start=0,
 
         report.adv_train_adv_eval = accuracy
 
-    # Perform baseline simple training
-    eva_p0 = "Baseline Evaluation"
-    eva_p1 = preds_baseline
     model_train(sess, x, y, preds_baseline, X_train, Y_train,
+                predictions_adv=preds_2_adv,
                 evaluate=evaluate_baseline,
-                eva_p0=eva_p0, eva_p1=eva_p1,
+                eva_p0=None, eva_p1=None,
                 args=train_params, rng=rng)
 
-    # after training the baseline model ==> save the adversarial examples
+    # after training evaluating
     feed_dict = {x: X_train}
-    training_jsma_x = sess.run(adv_x_2, feed_dict = feed_dict)
-    print("trained JSMA examples --> shape is:", training_jsma_x.shape)
-    f_out.write("trained JSMA examples --> shape is: " + str(training_jsma_x.shape) +'\n')
-
-    np_jsma_data_path = 'saver/numpy_jsma_x_data/'
-    np.savez(relative_path_2515 + np_jsma_data_path + 'jsma_training_x.npz', training_jsma_x=training_jsma_x)
-
-    feed_dict = {x: X_test}
-    testing_jsma_x = sess.run(adv_x_2, feed_dict = feed_dict)
-    print("testing JSMA examples --> shape is:", testing_jsma_x.shape)
-    f_out.write("testing JSMA examples --> shape is: " + str(testing_jsma_x.shape) + '\n')
-
-    np.savez(relative_path_2515 + np_jsma_data_path + 'jsma_testing_x.npz', training_jsma_x=training_jsma_x)
-
+    r = sess.run(adv_x_2, feed_dict = feed_dict)
 
     # evaluation function for other comparisons
     def evaluate_other(model_name=None, model_pred=None):
         # Accuracy of adversarially trained model on legitimate test inputs
         eval_params = {'batch_size': batch_size}
-        accuracy = model_eval(sess, x, y, model_pred, X_test, Y_test,
+
+        accuracy = model_eval(sess, x_0, y, model_pred, X_test_pca_0, Y_test,
                               args=eval_params)
         print(model_name + '\nTest accuracy on legitimate examples: %0.4f' % accuracy)
         f_out.write('\n\n' + model_name + '\nTest accuracy on legitimate examples: '+str(accuracy) + '\n')
 
 
         # Accuracy of the adversarially trained model on adversarial examples
-        accuracy = model_eval(sess, x, y, preds_2_adv, X_test,
+        accuracy = model_eval(sess, x, y, preds_2_adv, X_test_pca_0,
                               Y_test, args=eval_params)
         print('Test accuracy on adversarial examples: %0.4f' % accuracy)
         f_out.write('Test accuracy on adversarial examples:  ' + str(accuracy) + '\n')
@@ -188,7 +228,7 @@ def evaluate_weight(train_start=0, train_end=3000, test_start=0,
 
 
     # Training Session!!!
-    eva_p0 = 'model 0: make_5_cnn_small'
+    eva_p0 = 'model 0: PAC of Dimension 8 X 8'
     eva_p1 = preds_0
     model_train(sess, x, y, preds_0, X_train, Y_train,
                 evaluate=evaluate_other, eva_p0=eva_p0, eva_p1=eva_p1,
@@ -214,85 +254,36 @@ def evaluate_weight(train_start=0, train_end=3000, test_start=0,
                 evaluate=evaluate_other, eva_p0=eva_p0, eva_p1=eva_p1,
                 args=train_params)
 
-    eva_p0 = 'model 4: change kernel size to a larger kernel!!'
-    eva_p1 = preds_4
-    model_train(sess, x, y, preds_4, X_train, Y_train,
-                evaluate=evaluate_other, eva_p0=eva_p0, eva_p1=eva_p1,
-                args=train_params)
 
-    # Add ops to save and restore all the variables.
-    # use version I as V2 u may not recover!
-    saver = tf.train.Saver(write_version=tf.train.SaverDef.V1)
-    # Save entire sess to disk.
-
-    model_sess_name = 'cnn_weight_test.ckpt'
-    save_path = saver.save(sess, model_save_path + model_sess_name)
-    print("Model saved in file: %s" % save_path)
-
-
-
-    # to CSC2515 Files
-    relative_path_2515 = '/home/stephen/PycharmProjects/jsma-runall-mac/cleverhans_tutorials/' \
-                      'bai work/CSC2515 Files/'
-    # saves the output so later no need to re-fun file
-    np_data_path = 'saver/numpy_data/'
-
-    # baseline weights
-    weight_set_baseline = evaluate_model_tensor(model_baseline, sess, f_out)
-    np.savez(relative_path_2515 + np_data_path + 'model_baseline_weights.npz',
-             conv_weights= weight_set_baseline)
-
-    weight_set_0 = evaluate_model_tensor(model_0, sess, f_out)
-    np.savez(relative_path_2515 + np_data_path + 'model_0_weights.npz', conv_weights= weight_set_0)
-
-
-    weight_set_1 = evaluate_model_tensor(model_1, sess, f_out)
-    # saves the output so later no need to re-fun file
-    np.savez(relative_path_2515 + np_data_path + 'model_1_weights.npz', conv_weights= weight_set_1)
-
-    weight_set_2 = evaluate_model_tensor(model_2, sess, f_out)
-    np.savez(relative_path_2515 + np_data_path + 'model_2_weights.npz', conv_weights= weight_set_2)
-
-
-    weight_set_3 = evaluate_model_tensor(model_3, sess, f_out)
-    np.savez(relative_path_2515 + np_data_path + 'model_3_weights.npz', conv_weights= weight_set_3)
-
-    weight_set_4 = evaluate_model_tensor(model_4, sess, f_out)
-    np.savez(relative_path_2515 + np_data_path + 'model_4_weights.npz', conv_weights= weight_set_4)
+    # >>> data = np.load('/tmp/123.npz')
+    # >>> data['a']
+    np_data_path = 'saver/PCA_numpy_data/'
 
     # f_out.write('\nJSMA Tensor saved in: ' + jsma_save_path + '\n')
-    f_out.write('\n\nModel saved in file: ' + save_path +'\n')
-
-
-
+    f_out.write('\n\nModel saved in file: ' + relative_path_2515 + np_data_path +'\n')
 
     # close the file
     f_out.close()
 
 
-# evaluates model tensor and return the concatenated weight set
-def evaluate_model_tensor(model, sess_default, f_out):
-    # get model layers
-    model_layers = model.layers
-    weight_set = []
-    for l in model_layers:
-        # only Con2D im interested in learning its weight
-        if type(l) is Conv2D:
-            np_weight = l.kernels.eval(session=sess_default)
-            # sanity check
-            print("shape is: ", np_weight.shape)
-            f_out.write("shape is: " + str( np_weight.shape) + '\n')
+# pca filter
+def pca_filter(X, n_components):
+    # expand out to features
+    X_flat = X.reshape(-1, 28*28)
+    n_components_total = n_components * n_components
+    pca = PCA(n_components= n_components_total)
 
-            weight_set.append(np_weight)
+    X_filter_flat = pca.fit_transform(X_flat)
 
-    print("*****End of Model Weight********\n")
-    f_out.write("*****End of Model Weight********\n")
+    # back to X_filter
+    X_filter = X_filter_flat.reshape(-1, n_components, n_components, 1)
 
-    return weight_set
+    return X_filter
 
 
 def main(argv=None):
-    evaluate_weight()
+    # test ==> we will try various n_components
+    evaluate_pca()
 
 
 if __name__ == '__main__':

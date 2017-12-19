@@ -1,11 +1,3 @@
-# this file is for testing model weights
-"""
-This tutorial shows how to generate some simple adversarial examples
-and train a model using adversarial training using nothing but pure
-TensorFlow.
-It is very similar to mnist_tutorial_keras_tf.py, which does the same
-thing but with a dependence on keras.
-"""
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -22,6 +14,7 @@ from cleverhans.attacks import FastGradientMethod
 from cleverhans_tutorials.tutorial_models import *
 from cleverhans.utils import AccuracyReport, set_log_level
 from cleverhans.attacks import SaliencyMapMethod
+
 
 FLAGS = flags.FLAGS
 
@@ -54,7 +47,7 @@ def evaluate_weight(train_start=0, train_end=1, test_start=0,
     :return: an AccuracyReport object
     """
     model_save_path = '/home/stephen/PycharmProjects/jsma-runall-mac/cleverhans_tutorials/' \
-                      'bai work/CSC2515 Files/saver/tmp/'
+                      'bai work/CSC2515 Files/tmp/'
     # to CSC2515 Files
     relative_path_2515 = '/home/stephen/PycharmProjects/jsma-runall-mac/cleverhans_tutorials/' \
                       'bai work/CSC2515 Files/tmp/'
@@ -81,6 +74,8 @@ def evaluate_weight(train_start=0, train_end=1, test_start=0,
                                                   test_start=test_start,
                                                   test_end=test_end)
 
+
+
     # Use label smoothing
     assert Y_train.shape[1] == 10
     label_smooth = .1
@@ -102,7 +97,7 @@ def evaluate_weight(train_start=0, train_end=1, test_start=0,
     # rng_0 = np.random.RandomState([2017, 12, 12])
     # rng_1 = np.random.RandomState([2017, 11, 11])
 
-    f_out = open("JSMA_weight_evaluation.log", "w")
+    f_out = open(relative_path_2515 + "Weight_JSMA_evaluation_SAMPLE.log", "w")
 
     # this is for running 5 cnn?
     model_0 = make_5_cnn_small(nb_filters=nb_filters)

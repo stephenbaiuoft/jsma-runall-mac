@@ -174,9 +174,27 @@ def make_basic_cnn(nb_filters=64, nb_classes=10,
     # layers are a list of objects
     layers = [Conv2D(nb_filters, (8, 8), (2, 2), "SAME"),
               ReLU(),
-              Conv2D(nb_filters * 2, (6, 6), (2, 2), "VALID"),
+              Conv2D(nb_filters * 2, (6, 6), (1, 1), "VALID"),
               ReLU(),
               Conv2D(nb_filters * 2, (5, 5), (1, 1), "VALID"),
+              ReLU(),
+              Flatten(),
+              Linear(nb_classes),
+              Softmax()]
+
+    model = MLP(layers, input_shape)
+    return model
+
+# have to change kernel shape to fit pca dimension reductions!
+def make_basic_cnn_pca(nb_filters=64, nb_classes=10,
+                   input_shape=(None, 28, 28, 1)):
+
+    # layers are a list of objects
+    layers = [Conv2D(nb_filters, (8, 8), (1, 1), "SAME"),
+              ReLU(),
+              Conv2D(nb_filters * 2, (6, 6), (2, 2), "VALID"),
+              ReLU(),
+              Conv2D(nb_filters * 2, (3, 3), (1, 1), "VALID"),
               ReLU(),
               Flatten(),
               Linear(nb_classes),

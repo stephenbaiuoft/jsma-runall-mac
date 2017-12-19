@@ -10,7 +10,8 @@ cleverhans_tutorials/bai work/saver/cnn_weight_test.ckpt.*
 cleverhans_tutorials/bai work/Computer Security/jsma_training_data.*
 cleverhans_tutorials/bai work/saver/
 jsma_training_data.npz
-
+tmp/
+cleverhans_tutorials/bai work/CSC2515 Files/tmp/
 # C extensions
 *.so
 
