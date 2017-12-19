@@ -19,7 +19,7 @@ FLAGS = flags.FLAGS
 
 
 def evaluate_weight(train_start=0, train_end=3000, test_start=0,
-                   test_end=500, nb_epochs=8, batch_size=128,
+                   test_end=500, nb_epochs=6, batch_size=128,
                    learning_rate=0.001,
                    nb_filters=64):
     """
@@ -165,7 +165,8 @@ def evaluate_weight(train_start=0, train_end=3000, test_start=0,
     testing_jsma_x = sess.run(adv_x_2, feed_dict = feed_dict)
     print("testing JSMA examples --> shape is:", testing_jsma_x.shape)
     f_out.write("testing JSMA examples --> shape is: " + str(testing_jsma_x.shape) + '\n')
-
+    # Bug here ===> will fix later.... --> but will not regenerate the code
+    # Only affects restoring lol
     np.savez(relative_path_2515 + np_jsma_data_path + 'jsma_testing_x.npz', training_jsma_x=training_jsma_x)
 
 
