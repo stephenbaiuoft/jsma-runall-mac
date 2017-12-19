@@ -12,6 +12,7 @@ cleverhans_tutorials/bai work/saver/
 jsma_training_data.npz
 tmp/
 cleverhans_tutorials/bai work/CSC2515 Files/tmp/
+numpy_pca_data/
 # C extensions
 *.so
 

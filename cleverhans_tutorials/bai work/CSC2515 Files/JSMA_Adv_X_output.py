@@ -151,7 +151,6 @@ def main(argv=None):
     # test ==> we will try various n_components
     evaluate_pca()
 
-
 if __name__ == '__main__':
 
 

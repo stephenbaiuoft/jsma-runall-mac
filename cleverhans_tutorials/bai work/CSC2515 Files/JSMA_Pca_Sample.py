@@ -32,14 +32,10 @@ def evaluate_pca(train_start=0, train_end=3000, test_start=0,
     relative_path_2515 = '/home/stephen/PycharmProjects/jsma-runall-mac/cleverhans_tutorials/' \
                       'bai work/CSC2515 Files/'
 
-    # Object used to keep track of (and return) key accuracies
-    report = AccuracyReport()
-
     # Set TF random seed to improve reproducibility
     tf.set_random_seed(1234)
 
-    # Set logging level to see debug information
-    set_log_level(logging.DEBUG)
+
 
 
 
@@ -98,23 +94,22 @@ def evaluate_pca(train_start=0, train_end=3000, test_start=0,
     ###########################################################
     #####BASELINE 4 models of 25, 36, 49, 100,
     ###########################################################
+
+    # >>> data = np.load('/tmp/123.npz')
+    # >>> data['a']
+    # load JSMA numpy array
     np_jsma_data_path = 'saver/numpy_jsma_x_data/'
+    file = 'jsma_testing_x.npz'
+    data = np.load(relative_path_2515 + np_jsma_data_path + file)
+    X_jsma_testing  = data['testing_jsma_x']
 
-    # Training Data is Not Used
-    X_training_saved = np.load(relative_path_2515 + np_jsma_data_path + 'jsma_training_x.npz')
-    X_jsma_training = X_training_saved['training_jsma_x']
+    # Temporary solution: ===> terminal to compute PCA...
+    np_jsma_pca_data_path ='saver/numpy_pca_data/'
+    filename_25 = 'pca25.npz'
+    data_25 = np.load(relative_path_2515 + np_jsma_pca_data_path + filename_25)
+    X_jsma_testing_pca_0 = data_25['ift25']
 
-    X_testing_saved = np.load(relative_path_2515 + np_jsma_data_path + 'jsma_testing_x.npz')
-    # bug in the previous saving script lol
-    X_jsma_testing = X_testing_saved['training_jsma_x']
-
-
-    # this corresponds to Y_testing
-
-    n_components = 5
-
-    # shape should be None x 28 x 28
-    X_jsma_testing_pca_0 = pca_filter(X_test, n_components)
+    X_jsma_testing_pca_0 = X_jsma_testing_pca_0.reshape(-1,28, 28,1)
 
 
     # evaluation function for other comparisons
@@ -147,33 +142,6 @@ def evaluate_pca(train_start=0, train_end=3000, test_start=0,
                 args=train_params, rng=rng)
 
 
-    n_components = 6
-    X_train_pca_1 = pca_filter(X_train, n_components)
-    X_test_pca_1 = pca_filter(X_test,n_components)
-
-
-    n_components = 7
-    X_train_pca_2 = pca_filter(X_train, n_components)
-    X_test_pca_2 = pca_filter(X_test,n_components)
-
-
-
-    n_components = 10
-    X_train_pca_3 = pca_filter(X_train, n_components)
-    X_test_pca_3 = pca_filter(X_test,n_components)
-
-
-
-    # >>> data = np.load('/tmp/123.npz')
-    # >>> data['a']
-    np_pca_data_path = 'saver/numpy_pca_data'
-
-    np.savez(relative_path_2515 + np_jsma_data_path + 'X_jsma_testing_pca_0.npz',
-             X_jsma_testing_pca_0=X_jsma_testing_pca_0 )
-
-    # f_out.write('\nJSMA Tensor saved in: ' + jsma_save_path + '\n')
-    f_out.write('\n\nPCA data saved in file: ' + relative_path_2515 + np_pca_data_path +'\n')
-
     # close the file
     f_out.close()
 
@@ -182,13 +150,16 @@ def evaluate_pca(train_start=0, train_end=3000, test_start=0,
 def pca_filter(X, n_components):
     # expand out to features
     X_flat = X.reshape(-1, 28*28)
-    n_components_total = n_components * n_components
-    pca = PCA(n_components= n_components_total)
 
-    X_filter_flat = pca.fit_transform(X_flat)
+    n_components_total = n_components * n_components
+    pca = PCA(n_components= 25)
+
+    s_fit = pca.fit(X_flat)
+    s_fit_transform = pca.transform(s_fit)
+
 
     # inverse back to original planes
-    X_inverse_flat = pca.inverse_transform(X_filter_flat)
+    X_inverse_flat = pca.inverse_transform(s_fit_transform)
 
     # back to X_filter
     X_filter = X_inverse_flat.reshape(-1, 28, 28, 1)

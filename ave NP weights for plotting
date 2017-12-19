@@ -1,0 +1,14 @@
+* [33m5177a6d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mcsc2515_v3[m[33m, [m[1;31morigin/csc2515_v3[m[33m)[m prototype version for PCA
+* [33m4477e49[m modified JSMA weight ==> save JSMA examples --> for next script
+* [33mb56e746[m modified JSMA to save NP weights for plotting
+* [33ma7a526f[m[33m ([m[1;32mmaster[m[33m)[m JSMA: included large file -> rebase this commit
+[31m|[m * [33m9c2779b[m[33m ([m[1;32mcsc2515-backup[m[33m)[m modified jsma_weight_test.py
+[31m|[m * [33me050db6[m just finished basic: try jsma
+[31m|[m[31m/[m  
+* [33m1c33806[m[33m ([m[1;31morigin/csc2515[m[33m, [m[1;32mnp_array_training[m[33m)[m added corresponding parametesr
+* [33m5f6a2bc[m[33m ([m[1;31morigin/np_array_training[m[33m)[m changed logger to file
+* [33m46c1844[m fixed preds_random
+* [33ma552852[m first draft working version
+* [33mb5a24fb[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m before doing genereate.np
+* [33mcb3fd97[m added print for log info
+* [33mc7c4203[m first commit with run all test

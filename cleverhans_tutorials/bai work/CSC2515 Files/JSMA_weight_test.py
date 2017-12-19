@@ -167,7 +167,7 @@ def evaluate_weight(train_start=0, train_end=3000, test_start=0,
     f_out.write("testing JSMA examples --> shape is: " + str(testing_jsma_x.shape) + '\n')
     # Bug here ===> will fix later.... --> but will not regenerate the code
     # Only affects restoring lol
-    np.savez(relative_path_2515 + np_jsma_data_path + 'jsma_testing_x.npz', training_jsma_x=training_jsma_x)
+    np.savez(relative_path_2515 + np_jsma_data_path + 'jsma_testing_x.npz', testing_jsma_x=testing_jsma_x)
 
 
     # evaluation function for other comparisons
