@@ -1,19 +1,19 @@
-testing JSMA examples --> shape is: (500, 28, 28, 1)
-[Unfiltered + CLEAN] Test accuracy on CLEAN examples:  0.973999993324
-[Unfiltered + Adversarial] Test accuracy on adversarial examples:  0.0339999999702
+testing JSMA examples --> shape is: (800, 28, 28, 1)
+[Unfiltered + CLEAN] Test accuracy on CLEAN examples:  0.965
+[Unfiltered + Adversarial] Test accuracy on adversarial examples:  0.0325
 
 
-[Model_0 NP + Filtered + CLEAN] Test accuracy on CLEAN examples:  0.945999991417
-[Model_0 NP + Filtered + Adversarial] Test accuracy on adversarial examples:  0.639999996662
+[Model_0 NP + Filtered + CLEAN] Test accuracy on CLEAN examples:  0.93375
+[Model_0 NP + Filtered + Adversarial] Test accuracy on adversarial examples:  0.67625
 
 
-[Model_1 NP + Filtered + CLEAN] Test accuracy on CLEAN examples:  0.96599998188
-[Model_1 NP + Filtered + Adversarial] Test accuracy on adversarial examples:  0.679999999046
+[Model_1 NP + Filtered + CLEAN] Test accuracy on CLEAN examples:  0.9625
+[Model_1 NP + Filtered + Adversarial] Test accuracy on adversarial examples:  0.7225
 
 
-[Model_2 NP + Filtered + CLEAN] Test accuracy on CLEAN examples:  0.933999996185
-[Model_2 NP + Filtered + Adversarial] Test accuracy on adversarial examples:  0.486000000954
+[Model_2 NP + Filtered + CLEAN] Test accuracy on CLEAN examples:  0.9625
+[Model_2 NP + Filtered + Adversarial] Test accuracy on adversarial examples:  0.57875
 
 
-[Model_3 NP Evaluation Filtered + CLEAN] Test accuracy on CLEAN examples:  0.935999993801
-[Model_3 NP Evaluation Filtered + Adversarial] Test accuracy on adversarial examples:  0.621999999523
+[Model_3 NP Evaluation Filtered + CLEAN] Test accuracy on CLEAN examples:  0.96125
+[Model_3 NP Evaluation Filtered + Adversarial] Test accuracy on adversarial examples:  0.54375

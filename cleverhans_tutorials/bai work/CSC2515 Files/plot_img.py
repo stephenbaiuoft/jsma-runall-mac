@@ -36,15 +36,23 @@ def plot_jsma_sample():
     plt.title("Adversarial Example")
     plt.show()
 
+
+# show detailed 2 figure comparisons
 def test():
-    # which digit to choose from
     i = 0
+    np_jsma_data_path = 'saver/numpy_jsma_x_data/'
 
-    data = np.load(relative_path_2515 + np_jsma_data_path + 'jsma_sample.npz')
-    jsma_x = data['jsma_x']
+    train_end = 3000
+    X_train, Y_train, X_test, Y_test = data_mnist(train_start=0,
+                                                  train_end=train_end,
+                                                  test_start=0,
+                                                  test_end=1)
 
-    data = np.load(relative_path_2515 + np_jsma_data_path + 'training_sample.npz')
-    training_x = data['sample_x']
+    training_x = X_train
+
+    data = np.load(relative_path_2515 + np_jsma_data_path + 'jsma_training_x.npz')
+    jsma_x = data['training_jsma_x']
+
 
     clean_x_u = training_x[i].reshape(28, 28)
     clean_x_5 = pca_filter_img(training_x, 5)[i]
@@ -59,11 +67,26 @@ def test():
     jsma_x_7 = pca_filter_img(jsma_x, 7)[i]
     jsma_x_10 = pca_filter_img(jsma_x, 10)[i]
 
+
     plt.figure(1)
-    plt.imshow(clean_x_5, cmap='gray')
+    plt.imshow(clean_x_u, cmap='gray')
+    plt.title('Clean Unfiltered Data')
 
     plt.figure(2)
-    plt.imshow(jsma_x_5, cmap='gray')
+    plt.imshow(jsma_x_u, cmap='gray')
+    plt.title('Adversarial Unfiltered Data')
+
+    plt.figure(3)
+
+    plt.imshow(clean_x_6, cmap='gray')
+    plt.title('Clean Filtered Data')
+
+    plt.figure(4)
+    plt.imshow(jsma_x_6, cmap='gray')
+
+    plt.title('Adversarial Filtered Data, n = 36')
+
+
 
     plt.show()
 
@@ -103,37 +126,47 @@ def plot_pca_sample():
     plt.figure(1)
     plt.subplot(1, 5, 1)
     plt.imshow(clean_x_u, cmap='gray')
+    plt.xlabel('unfiltered')
     plt.title('Clean Data')
 
     plt.subplot(1, 5, 2)
     plt.imshow(clean_x_5, cmap='gray')
+    plt.xlabel('n = 25')
 
     plt.subplot(1, 5, 3)
     plt.imshow(clean_x_6, cmap='gray')
+    plt.xlabel('n = 36')
 
     plt.subplot(1, 5, 4)
     plt.imshow(clean_x_7, cmap='gray')
+    plt.xlabel('n = 49')
 
     plt.subplot(1, 5, 5)
     plt.imshow(clean_x_10, cmap='gray')
+    plt.xlabel('n = 100')
 
 
     plt.figure(2)
     plt.subplot(1, 5, 1)
     plt.imshow(jsma_x_u, cmap='gray')
+    plt.xlabel('unfiltered')
     plt.title('Adversarial Data')
 
     plt.subplot(1, 5, 2)
     plt.imshow(jsma_x_5, cmap='gray')
+    plt.xlabel('n = 25')
 
     plt.subplot(1, 5, 3)
     plt.imshow(jsma_x_6, cmap='gray')
+    plt.xlabel('n = 36')
 
     plt.subplot(1, 5, 4)
     plt.imshow(jsma_x_7, cmap='gray')
+    plt.xlabel('n = 49')
 
     plt.subplot(1, 5, 5)
     plt.imshow(jsma_x_10, cmap='gray')
+    plt.xlabel('n = 100')
 
     plt.show()
 
@@ -156,7 +189,7 @@ def pca_filter_img(X, n_components):
 
 if __name__ == '__main__':
     # plot_jsma_sample()
-    plot_pca_sample()
+    # plot_pca_sample()
 
-    # test()
+    test()
     pass

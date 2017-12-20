@@ -24,7 +24,7 @@ FLAGS = flags.FLAGS
 # 20 * 20 ==> 400
 
 def evaluate_pca(train_start=0, train_end=3000, test_start=0,
-                   test_end=500, nb_epochs=6, batch_size=128,
+                   test_end=800, nb_epochs=6, batch_size=128,
                    learning_rate=0.001,
                    nb_filters=64):
 
