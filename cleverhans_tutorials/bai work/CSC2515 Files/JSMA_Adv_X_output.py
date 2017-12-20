@@ -23,7 +23,7 @@ FLAGS = flags.FLAGS
 # wanno make sure Training Data is larger than
 # 20 * 20 ==> 400
 
-def evaluate_pca(train_start=0, train_end=5, test_start=0,
+def evaluate_pca(train_start=0, train_end=3000, test_start=0,
                    test_end=1, nb_epochs=1, batch_size=128,
                    learning_rate=0.001,
                    nb_filters=64):
@@ -133,11 +133,14 @@ def evaluate_pca(train_start=0, train_end=5, test_start=0,
 
     # after training evaluating
     feed_dict = {x: X_train}
-    r = sess.run(adv_x_2, feed_dict = feed_dict)
-    print("r shape is:", r.shape)
+    jsma_x = sess.run(adv_x_2, feed_dict = feed_dict)
+    print("jsma_x shape is:", jsma_x.shape)
 
-    np_jsma_data_path = 'saver/numpy_jsma_x_data/'
-    np.savez(relative_path_2515 + np_jsma_data_path + 'tmp.npz', r=r)
+    np_jsma_data_path = 'saver/data_comparison/'
+    np.savez(relative_path_2515 + np_jsma_data_path + 'jsma_sample.npz', jsma_x=jsma_x)
+    # saving training sample
+    np.savez(relative_path_2515 + np_jsma_data_path + 'training_sample.npz', sample_x=X_train)
+
 
     # >>> data = np.load('/tmp/123.npz')
     # >>> data['a']

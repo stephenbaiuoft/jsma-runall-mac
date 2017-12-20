@@ -100,7 +100,7 @@ def evaluate_weight(train_start=0, train_end=3000, test_start=0,
     model_1 = make_5_cnn_large(nb_filters=nb_filters)
     preds_1 = model_1(x)
 
-    # change # of perceptons in a model_01
+    # change # of perceptons in a model_01 ==>larger kernel
     model_2 = make_cnn_percepton(nb_filters=nb_filters)
     preds_2 = model_2(x)
 
@@ -108,7 +108,7 @@ def evaluate_weight(train_start=0, train_end=3000, test_start=0,
     model_3 = make_cnn_filter(nb_filters=20)
     preds_3 = model_3(x)
 
-    # change kernel size
+    # larger kernel size!!!
     model_4 = make_cnn_large_kernel(nb_filters=nb_filters)
     preds_4 = model_4(x)
 
